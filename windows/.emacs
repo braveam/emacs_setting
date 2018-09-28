@@ -215,9 +215,6 @@
 ;;       '(("/\\(bash\\|tcsh\\|svn\\|ssh\\|gpg[esvk]?\\)\\.exe" .
 ;;       (nil . ("fakecygpty.exe" . set-process-connection-type-pty)))))
 
-;; ツールバーを消す
-;(tool-bar-mode nil)
-
 ;; 長い行の折り返しを t:しない nil:する
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows t)

@@ -1,228 +1,132 @@
-;;;; -*- mode: emacs-lisp; coding: iso-2022-7bit -*-
-;;;;
-;;;; Copyright (C) 2001 The Meadow Team
-
-;; Author: Koichiro Ohba <koichiro@meadowy.org>
-;;      Kyotaro HORIGUCHI <horiguti@meadowy.org>
-;;      Hideyuki SHIRAI <shirai@meadowy.org>
-;;      KOSEKI Yoshinori <kose@meadowy.org>
-;;      and The Meadow Team.
-
-
-;; ;;; Mule-UCS の設定
-;; ;; ftp://ftp.m17n.org/pub/mule/Mule-UCS/ が オフィシャルサイトですが、
-;; ;; http://www.meadowy.org/~shirai/elisp/mule-ucs.tar.gz に既知のパッチ
-;; ;; をすべて適用したものがおいてあります。
-;; ;; (set-language-environment) の前に設定します
-;; (require 'jisx0213)
-
-
 ;;; 日本語環境設定
-;(set-language-environment "Japanese")
-(set-language-environment 'Japanese)
-;(set-terminal-coding-system 'utf-8)
-;(setq file-name-coding-system 'utf-8)
-;(set-clipboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
-;(setq coding-system-for-read 'mule-utf-8-unix)
-(prefer-coding-system 'utf-8) ; テキストファイル
-(set-default-coding-systems 'utf-8) ; dired mode のファイル名とか？
-;(set-keyboard-coding-system 'utf-8)
-;(set-buffer-file-coding-system 'utf-8-unix)
+(set-language-environment "Japanese")
+(prefer-coding-system 'utf-8) ;; デフォルト
+(modify-coding-system-alist 'file "\\.rb\\'" 'utf-8)                ;; Ruby
+(modify-coding-system-alist 'file "\\.erb\\'" 'utf-8)               ;; html.erb
+(modify-coding-system-alist 'file "\\.html?\\'" 'utf-8)             ;; html, htm
+(modify-coding-system-alist 'file "\\.js\\'" 'utf-8)                ;; Java Script
+(modify-coding-system-alist 'file "\\.less\\'" 'utf-8)              ;; Less
+(modify-coding-system-alist 'file "\\.scss\\'" 'utf-8)              ;; SASS
+(modify-coding-system-alist 'file "\\.coffee\\'" 'utf-8)            ;; Coffee Script
+(modify-coding-system-alist 'file "\\.java\\'" 'utf-8)              ;; Java
+(modify-coding-system-alist 'file "\\.clj\\'" 'utf-8)               ;; Clojure
+(modify-coding-system-alist 'file "\\.\\(scala\\|sbt\\)\\'" 'utf-8) ;; Scala
+(modify-coding-system-alist 'file "\\.[eh]rl\\'" 'utf-8)            ;; Erlang
+(modify-coding-system-alist 'file "\\.exs?\\'" 'utf-8)              ;; Elixir
 
 
-;;; IMEの設定
-;(mw32-ime-initialize)
-;(setq default-input-method "MW32-IME")
-;(setq-default mw32-ime-mode-line-state-indicator "[--]")
-;(setq mw32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[--]"))
-;(add-hook 'mw32-ime-on-hook
-;	  (function (lambda () (set-cursor-height 2))))
-;(add-hook 'mw32-ime-off-hook
-;	  (function (lambda () (set-cursor-height 4))))
+;; IME
+;;(setq default-input-method "W32-IME")
+;;(setq-default w32-ime-mode-line-state-indicator "[--]")
+;;(setq w32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[--]"))
+;;(w32-ime-initialize)
+;; 日本語入力時にカーソルの色を変える設定 (色は適宜変えてください)
+(add-hook 'w32-ime-on-hook '(lambda () (set-cursor-color "coral4")))
+(add-hook 'w32-ime-off-hook '(lambda () (set-cursor-color "black")))
 
+;; ミニバッファに移動した際は最初に日本語入力が無効な状態にする
+(add-hook 'minibuffer-setup-hook 'deactivate-input-method)
 
-;; ;;; カーソルの設定
-;; ;; (set-cursor-type 'box)            ; Meadow-1.10互換 (SKK等で色が変る設定)
-;; ;; (set-cursor-type 'hairline-caret) ; 縦棒キャレット
+;; isearch に移行した際に日本語入力を無効にする
+(add-hook 'isearch-mode-hook '(lambda ()
+                                (deactivate-input-method)
+                                (setq w32-ime-composition-window (minibuffer-window))))
+(add-hook 'isearch-mode-end-hook '(lambda () (setq w32-ime-composition-window nil)))
 
+;; helm 使用中に日本語入力を無効にする
+(advice-add 'helm :around '(lambda (orig-fun &rest args)
+                             (let ((select-window-functions nil)
+                                   (w32-ime-composition-window (minibuffer-window)))
+                               (deactivate-input-method)
+                               (apply orig-fun args))))
+
+;;; 英数モード関連
+;;; emacs 起動時は英数モードから始める
+;(add-hook 'after-init-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
+;;; minibuffer 内は英数モードにする
+;(add-hook 'minibuffer-setup-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
+;;; [migemo]isearch のとき IME を英数モードにする
+										;(add-hook 'isearch-mode-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
 
 ;;; マウスカーソルを消す設定
 (setq w32-hide-mouse-on-key t)
 (setq w32-hide-mouse-timeout 5000)
 
+;; ビープ音を消す
+(setq visible-bell t)
+(setq ring-bell-function 'ignore)
 
-;;; font-lockの設定
-(global-font-lock-mode t)
+;; TABはスペース４個分
+(setq-default tab-width 4)
+(setq-default default-tab-width 4)
 
-
-;; ;;; TrueType フォント設定
-;; (w32-add-font
-;;  "private-fontset"
-;;  '((spec
-;;     ((:char-spec ascii :height 120)
-;;      strict
-;;      (w32-logfont "Courier New" 0 -13 400 0 nil nil nil 0 1 3 49))
-;;     ((:char-spec ascii :height 120 :weight bold)
-;;      strict
-;;      (w32-logfont "Courier New" 0 -13 700 0 nil nil nil 0 1 3 49))
-;;     ((:char-spec ascii :height 120 :slant italic)
-;;      strict
-;;      (w32-logfont "Courier New" 0 -13 400 0   t nil nil 0 1 3 49))
-;;     ((:char-spec ascii :height 120 :weight bold :slant italic)
-;;      strict
-;;      (w32-logfont "Courier New" 0 -13 700 0   t nil nil 0 1 3 49))
-;;     ((:char-spec japanese-jisx0208 :height 120)
-;;      strict
-;;      (w32-logfont "ＭＳ ゴシック" 0 -16 400 0 nil nil nil 128 1 3 49))
-;;     ((:char-spec japanese-jisx0208 :height 120 :weight bold)
-;;      strict
-;;      (w32-logfont "ＭＳ ゴシック" 0 -16 700 0 nil nil nil 128 1 3 49)
-;;      ((spacing . -1)))
-;;     ((:char-spec japanese-jisx0208 :height 120 :slant italic)
-;;      strict
-;;      (w32-logfont "ＭＳ ゴシック" 0 -16 400 0   t nil nil 128 1 3 49))
-;;     ((:char-spec japanese-jisx0208 :height 120 :weight bold :slant italic)
-;;      strict
-;;      (w32-logfont "ＭＳ ゴシック" 0 -16 700 0   t nil nil 128 1 3 49)
-;;      ((spacing . -1))))))
-
-;; (set-face-attribute 'variable-pitch nil :family "*")
-
-
-;; ;;; BDF フォント設定
-;;
-;; ;;; (方法その1) Netinstall パッケージを使う方法
-;; ;;; misc と intlfonts パッケージを入れます。
-;; ;;; .emacsの設定
-;; (setq bdf-use-intlfonts16 t)
-;; (setq initial-frame-alist '((font . "intlfonts16")))
-;;
-;; ;;; (方法その1') 
-;; ;;; intlfonts-file-16dot-alist の形式で bdf-fontset-alist を書き、
-;; ;;; 次を設定すれば良い。
-;; ;;;  (require 'bdf)
-;; ;;;  (bdf-configure-fontset "bdf-fontset" bdf-fontset-alist)
-;; ;;; 詳細は $MEADOW/pkginfo/auto-autoloads.el と $MEADOW/site-lisp/bdf.el を
-;; ;;; 参照のこと。
-;;
-;; ;;; (方法その2) 
-;; ;;; フォントの指定方法は次のサンプルを参考にする。
-;; ;;; normal, bold, italic, bold-itaric フォントを指定する必要あり。
-;; (setq bdf-font-directory "c:/Meadow/fonts/intlfonts/")
-;; (w32-add-font "bdf-fontset"
-;; `((spec 
-;;    ;; ascii
-;;    ((:char-spec ascii :height any :weight normal :slant normal)
-;;     strict (bdf-font ,(expand-file-name "lt1-16-etl.bdf" bdf-font-directory)))
-;;    ((:char-spec ascii :height any :weight bold :slant normal)
-;;     strict (bdf-font ,(expand-file-name "lt1-16b-etl.bdf" bdf-font-directory)))
-;;    ((:char-spec ascii :height any :weight normal :slant any)
-;;     strict (bdf-font ,(expand-file-name "lt1-16i-etl.bdf" bdf-font-directory)))
-;;    ((:char-spec ascii :height any :weight bold :slant any)
-;;     strict (bdf-font ,(expand-file-name "lt1-16bi-etl.bdf" bdf-font-directory)))
-;;    ;; katakana-jisx0201
-;;    ((:char-spec katakana-jisx0201 :height any :weight normal :slant normal)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory))
-;;     ((encoding . 1-byte-set-msb))) 
-;;    ((:char-spec katakana-jisx0201 :height any :weight bold :slant normal)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory))
-;;     ((encoding . 1-byte-set-msb))) 
-;;    ((:char-spec katakana-jisx0201 :height any :weight normal :slant any)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory))
-;;     ((encoding . 1-byte-set-msb))) 
-;;    ((:char-spec katakana-jisx0201 :height any :weight bold :slant any)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory))
-;;     ((encoding . 1-byte-set-msb)))
-;;    ;; latin-jisx0201
-;;    ((:char-spec latin-jisx0201 :height any :weight normal :slant normal)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory)))
-;;    ((:char-spec latin-jisx0201 :height any :weight bold :slant normal)
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory)))
-;;    ((:char-spec latin-jisx0201 :height any :weight normal :slant any) 
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory))) 
-;;    ((:char-spec latin-jisx0201 :height any :weight bold :slant any) 
-;;     strict (bdf-font ,(expand-file-name "8x16rk.bdf" bdf-font-directory)))
-;;    ;; japanese-jisx0208
-;;    ((:char-spec japanese-jisx0208 :height any :weight normal :slant normal) 
-;;     strict (bdf-font ,(expand-file-name "j90-16.bdf" bdf-font-directory)))
-;;    ((:char-spec japanese-jisx0208 :height any :weight bold :slant normal)
-;;     strict (bdf-font ,(expand-file-name "j90-16.bdf" bdf-font-directory))) 
-;;    ((:char-spec japanese-jisx0208 :height any :weight normal :slant any)
-;;     strict (bdf-font ,(expand-file-name "j90-16.bdf" bdf-font-directory)))
-;;    ((:char-spec japanese-jisx0208 :height any :weight bold :slant any)
-;;     strict (bdf-font ,(expand-file-name "j90-16b.bdf" bdf-font-directory))))))
-
-;; 初期フレームの設定
+;;; 初期フレームの設定
 (setq default-frame-alist
-      (append (list '(foreground-color . "black")
-		    '(background-color . "LemonChiffon")
-		    '(background-color . "gray")
-		    '(border-color . "black")
-		    '(mouse-color . "white")
-		    '(cursor-color . "black")
-;;		    '(ime-font . (w32-logfont "ＭＳ ゴシック"
-;;					      0 16 400 0 nil nil nil
-;;					      128 1 3 49)) ; TrueType のみ
-;;		    '(font . "bdf-fontset")    ; BDF
-;;		    '(font . "private-fontset"); TrueType
-		    '(width . 207)
-		    '(height . 60)
-		    '(top . 10)
-		    '(left . 2))
-	      default-frame-alist))
+      (append (list
+            '(foreground-color . "black")
+            '(background-color . "LemonChiffon")
+;;            '(background-color . "gray")
+            '(border-color . "black")
+            '(mouse-color . "white")
+            '(cursor-color . "black")
+;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+            '(width . 180)
+            '(height . 50)
+            '(top . 0)
+            '(left . 0)
+            )
+            default-frame-alist))
+
+;;;; ロードパス
+(add-to-list 'load-path "~/emacs/lisp/")
+
+;; 
+(setq default-directory "~/") 
+(setq command-line-default-directory "~/")
+
+;; melpaパッケージ
+(require 'package) ;; You might already have this line
+;(add-to-list 'package-archives
+;             '("melpa" . "http://melpa.org/packages/"))
+;(when (< emacs-major-version 24)
+;  ;; For important compatibility libraries like cl-lib
+;  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+;(package-initialize) ;; You might already have this line
+(package-initialize)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("melpa" . "http://melpa.org/packages/")
+        ("org" . "http://orgmode.org/elpa/")))
 
 
-;; ;;; shell の設定
-
-;; ;;; Cygwin の bash を使う場合
-;; (setq explicit-shell-file-name "bash")
-;; (setq shell-file-name "sh")
-;; (setq shell-command-switch "-c") 
-
-;; ;;; Virtually UN*X!にある tcsh.exe を使う場合
-;; (setq explicit-shell-file-name "tcsh.exe") 
-;; (setq shell-file-name "tcsh.exe") 
-;; (setq shell-command-switch "-c") 
-
-;; ;;; WindowsNT に付属の CMD.EXE を使う場合。
-;; (setq explicit-shell-file-name "CMD.EXE") 
-;; (setq shell-file-name "CMD.EXE") 
-;; (setq shell-command-switch "\\/c") 
-
-;(setq explicit-shell-file-name "/cygwin/bin/bash.exe")
-;(setq shell-file-name "/cygwin/bin/bash.exe")
-;(setq shell-command-switch "-c") 
-
-
-;;; argument-editing の設定
-;(require 'mw32script)
-;(mw32script-init)
-
-
-;; ;;; browse-url の設定
-;; (global-set-key [S-mouse-2] 'browse-url-at-mouse)
-
-;; c-mode
-;(add-hook 'c-mode-hook
-;  '(lambda ()
-;     (setq c-tab-always-indent t)
-;     (setq default-tab-width 4)
-;     (setq tab-width 4)
-;   )
-;)
+;;; インデントハイライト
+;(add-to-list 'load-path "~/emacs/lisp/Highlight-Indentation-for-Emacs")
+;(require 'highlight-indentation)
+;(setq highlight-indentation-offset 2)
+;;(set-face-background 'highlight-indentation-face "ivory1")
+;(set-face-background 'highlight-indentation-face "LightYellow1")
+;(set-face-background 'highlight-indentation-current-column-face "AntiqueWhite1")
+;
+;; highlight-indentation-mode が呼ばれたら highlight-indentation-current-column-mode も実行する
+;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
 
 ; c-mode, d-mode 共通
-(defun my-c-mode-hook ()
+(defun my-c-mode-common-init ()
   (c-set-style "linux")
   (setq tab-width 4)
-  (setq c-basic-offset tab-width))
+  (setq c-basic-offset tab-width)
+  ;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+  (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
+  (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
+  (gtags-mode 1)
+  (add-to-list 'ac-sources 'ac-source-gtags)
+)
 
-; c-mode
-(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook 'my-c-mode-on-init)
+(add-hook 'c++-mode-hook 'my-c-mode-common-init)
 
 ;; d-mode
-(autoload 'd-mode "d-mode" 
+(autoload 'd-mode "d-mode"
   "Major mode for editing D code." t)
 (setq auto-mode-alist (cons '( "\\.d\\'" . d-mode ) auto-mode-alist ))
 ;(autoload 'dlint-minor-mode "dlint" nil t)
@@ -230,6 +134,64 @@
 
 (add-hook 'd-mode-hook 'my-c-mode-hook)
 
+;; .ino をc-modeで開く
+(setq auto-mode-alist
+      (append '(("\\.ino$" . c++-mode))
+              auto-mode-alist))
+
+;;; yaml-mode
+;(require 'yaml-mode)
+;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+
+;; web-mode
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq-default tab-width 2 indent-tabs-mode nil)
+  (setq web-mode-html-offset 2)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-element-highlight t)
+  (highlight-indentation-mode)
+)
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
+; 色の設定
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(web-mode-comment-face ((t (:foreground "#D9333F"))))
+ '(web-mode-css-at-rule-face ((t (:foreground "#FF7F00"))))
+ '(web-mode-css-pseudo-class-face ((t (:foreground "#FF7F00"))))
+ '(web-mode-css-rule-face ((t (:foreground "#A0D8EF"))))
+ '(web-mode-doctype-face ((t (:foreground "#82AE46"))))
+ '(web-mode-html-attr-name-face ((t (:foreground "#C97586"))))
+ '(web-mode-html-attr-value-face ((t (:foreground "#82AE46"))))
+ '(web-mode-html-tag-face ((t (:foreground "#E6B422" :weight bold))))
+ '(web-mode-server-comment-face ((t (:foreground "#D9333F"))))
+ '(web-mode-symbol-face ((t (:foreground "blue")))))
+; ハイライト色の設定
+(eval-after-load "web-mode"
+  '(set-face-background 'web-mode-current-element-highlight-face "blue"))
+; キーがかぶるので無効化
+(define-key web-mode-map (kbd "\C-c\C-w") nil)
+
+;; ruby-mode
+(add-hook 'ruby-mode-hook 'highlight-indentation-mode)
+
+;; gnu global
+(autoload 'gtags-mode "gtags" "" t)
+(setq gtags-mode-hook
+      '(lambda ()
+         (local-set-key "\M-t" 'gtags-find-tag)
+         (local-set-key "\M-r" 'gtags-find-rtag)
+         (local-set-key "\M-s" 'gtags-find-symbol)
+         (local-set-key "\C-t" 'gtags-pop-stack)
+         ))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -239,23 +201,23 @@
 ;;   (lambda (x) (general-process-argument-editing-function x nil t)))
 ;;
 ;; (defun w32-print-region (start end
-;; 				  &optional lpr-prog delete-text buf display
-;; 				  &rest rest)
+;;                   &optional lpr-prog delete-text buf display
+;;                   &rest rest)
 ;;   (interactive)
 ;;   (let ((tmpfile (convert-standard-filename (buffer-name)))
-;; 	   (w32-start-process-show-window t)
-;; 	   ;; もし、dos 窓が見えていやな人は上記の `t' を `nil' にします
-;; 	   ;; ただし、`nil' にすると Meadow が固まる環境もあるかもしれません
-;; 	   (coding-system-for-write w32-system-coding-system))
+;;        (w32-start-process-show-window t)
+;;        ;; もし、dos 窓が見えていやな人は上記の `t' を `nil' にします
+;;        ;; ただし、`nil' にすると Meadow が固まる環境もあるかもしれません
+;;        (coding-system-for-write w32-system-coding-system))
 ;;     (while (string-match "[/\\]" tmpfile)
-;; 	 (setq tmpfile (replace-match "_" t nil tmpfile)))
+;;      (setq tmpfile (replace-match "_" t nil tmpfile)))
 ;;     (setq tmpfile (expand-file-name (concat "_" tmpfile "_")
-;; 				       temporary-file-directory))
+;;                        temporary-file-directory))
 ;;     (write-region start end tmpfile nil 'nomsg)
 ;;     (call-process "notepad" nil nil nil "/p" tmpfile)
 ;;     (and (file-readable-p tmpfile) (file-writable-p tmpfile)
-;; 	    (delete-file tmpfile))))
-;; 
+;;         (delete-file tmpfile))))
+;;
 ;; (setq print-region-function 'w32-print-region)
 
 ;; ;;; fakecygpty の設定
@@ -263,19 +225,11 @@
 ;; ;; 扱えるようになります
 ;; (setq mw32-process-wrapper-alist
 ;;       '(("/\\(bash\\|tcsh\\|svn\\|ssh\\|gpg[esvk]?\\)\\.exe" .
-;; 	  (nil . ("fakecygpty.exe" . set-process-connection-type-pty)))))
-
-;; ツールバーを消す
-(tool-bar-mode nil)
-
-;; TABはスペース４個分
-(setq-default tab-width 4)
-(setq-default default-tab-width 4)
+;;       (nil . ("fakecygpty.exe" . set-process-connection-type-pty)))))
 
 ;; 長い行の折り返しを t:しない nil:する
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows t)
-
 
 ;; buffer list 表示後カーソルをそこに移動する
 (define-key ctl-x-map "\C-b" 'buffer-menu)
@@ -306,37 +260,131 @@
 (setq compilation-scroll-output t)
 
 ;; ワードコピー
-(defun y-copy-word ()
-  (interactive)
-  (command-execute 'backward-word)
-  (command-execute 'set-mark-command)
-  (command-execute 'forward-word)
-  (command-execute 'kill-ring-save)
-)
-
-(global-set-key "\C-c\C-w" 'y-copy-word)
+(defun kill-ring-save-current-word ()
+"Save current word to kill ring as if killed, but don't kill it."
+(interactive)
+(kill-new (current-word)))
+(global-set-key "\C-c\C-w" 'kill-ring-save-current-word)
 
 ;; カスタマイズコンパイル
 (defun yrecompile()
   (interactive)
   (if(and
-	  (not(string=(buffer-name) "*compilation*"))
-	  (get-buffer "*compilation*"))
-	  (progn
-		(switch-to-buffer-other-window "*compilation*")
-		(command-execute 'compile)
-		(command-execute 'other-window)
-		)
-	(progn
-	  (command-execute 'compile)
-	  (end-of-buffer-other-window "*compilation*")
-	  )
-	)
+      (not(string=(buffer-name) "*compilation*"))
+      (get-buffer "*compilation*"))
+      (progn
+        (switch-to-buffer-other-window "*compilation*")
+        (command-execute 'compile)
+        (command-execute 'other-window)
+        )
+    (progn
+      (command-execute 'compile)
+      (end-of-buffer-other-window "*compilation*")
+      )
+    )
 )
+
+;; コメント
+;; 複数業コメント
+(defun insert-comment-function ()
+  (interactive)
+  (insert "/**
+*
+*/"))
+
+;; １行コメント
+(defun insert-line-comment-function ()
+  (interactive)
+  (insert "///< @todo ")
+)
+
+;;; auto-complete
+;;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+;(ac-config-default)
+;(global-auto-complete-mode t)
+;(setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
+;
+;(setq ac-use-quick-help t)
+;(setq ac-quick-help-delay 0.5)
+;(setq ac-menu-height 20)
+;(setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
+;(ac-set-trigger-key "TAB")
+;(add-to-list 'ac-ignores "/")
+;(add-to-list 'ac-ignores "//")
+;(add-to-list 'ac-ignores "///")
+;(add-to-list 'ac-ignores "////")
+;(define-key ac-mode-map (kbd "C-/") 'auto-complete)
+
+;;; grep-edit
+;(require 'grep-edit)
+
+;;; migemo
+(require 'migemo)
+;;;for mac
+(setq migemo-command "/usr/local/bin/cmigemo")
+(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+(setq migemo-options '("-q" "--emacs"))
+(setq migemo-coding-system 'utf-8-unix)
+;; for Windows
+;(setq migemo-command "cmigemo")
+;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
+;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
+;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
+;(setq migemo-options '("-q" "--emacs"))
+;(setq migemo-coding-system 'cp932-unix)
+;(setq migemo-coding-system 'utf-8-unix)
+;; migemo common
+(setq migemo-user-dictionary nil)
+(setq migemo-regex-dictionary nil)
+(load-library "migemo")
+(migemo-init)
+
+;; helm
+(helm-mode +1)
+; ファイル履歴
+(global-set-key [f7] 'helm-recentf)
+
+;(define-key helm-map (kbd "<tab>") 'helm-next-source)
+(define-key helm-map (kbd "<tab>") 'dabbrev-expand)
+(define-key helm-map (kbd "<right>") 'helm-select-action)
+; TABで補完
+(define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+
+;; helm-swoop
+(add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
+(require 'helm-swoop)
+(global-set-key (kbd "C-S-s") 'helm-swoop)
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-swoop-map (kbd "C-a") 'helm-maybe-exit-minibuffer)
+
+;; savehist
+(savehist-mode 1)
+
+;;; projectile-rails
+;(require 'projectile)
+;(projectile-global-mode)
+;
+;(require 'projectile-rails)
+;(add-hook 'projectile-mode-hook 'projectile-rails-on)
+;
+;(define-key projectile-rails-mode-map (kbd "C-c ; m") 'projectile-rails-find-model)
+;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-find-controller)
+;(define-key projectile-rails-mode-map (kbd "C-c ; v") 'projectile-rails-find-view)
+;(define-key projectile-rails-mode-map (kbd "C-c ; f m") 'projectile-rails-find-current-model)
+;(define-key projectile-rails-mode-map (kbd "C-c ; f c") 'projectile-rails-find-current-controller)
+;(define-key projectile-rails-mode-map (kbd "C-c ; f v") 'projectile-rails-find-current-view)
+;(define-key projectile-rails-mode-map (kbd "C-c ; f s") 'projectile-rails-find-current-spec)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-console)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; キーバインド
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; macバックスラッシュキー対策
+(define-key global-map [?\\] [?\\])
+(define-key global-map [?\C-\] [?\C-\\])
+(define-key global-map [?\M-\] [?\M-\\])
+(define-key global-map [?\C-\M-\] [?\C-\M-\\])
 
 ;; C-hをバックスペースに変更
 (keyboard-translate ?\C-h ?\C-?)
@@ -383,6 +431,34 @@
 (global-set-key [C-f9] 'yrecompile)
 (global-set-key [C-M-f9] 'compile)
 
+;; 最近使ったファイル
+(require 'recentf)
+(setq recentf-max-saved-items 50)            ;; recentf に保存するファイルの数
+(recentf-mode 1)
+;;(global-set-key [f7] 'recentf-open-files)
+
+;; コメント
+(global-set-key "\M-]" 'insert-comment-function)
+(global-set-key "\M-[" 'insert-line-comment-function)
+
+;; フォントサイズ変更キー
+; C-+ で拡大
+(global-set-key [(control ?\;)] (lambda () (interactive) (text-scale-increase 1)))
+; C-- で縮小
+(global-set-key [(control ?-)] (lambda () (interactive) (text-scale-decrease 1)))
+; C-0 でデフォルトに戻す
+(global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))
+
 ;;;
 ;;; end of file
 ;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(package-selected-packages (quote (multi-web-mode wgrep helm-swoop migemo helm)))
+ '(show-paren-mode t)
+ '(size-indication-mode t)
+ '(tool-bar-mode nil))
