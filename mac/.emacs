@@ -145,6 +145,7 @@
 ;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
 
 ;; web-mode
+(require 'web-mode)
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
   (setq-default tab-width 2 indent-tabs-mode nil)
