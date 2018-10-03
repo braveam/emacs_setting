@@ -362,10 +362,13 @@
 ;; savehist
 (savehist-mode 1)
 
+;; rinari
+(require 'rinari)
+(global-rinari-mode)
+
 ;;; projectile-rails
 ;(require 'projectile)
 ;(projectile-global-mode)
-;
 ;(require 'projectile-rails)
 ;(add-hook 'projectile-mode-hook 'projectile-rails-on)
 ;
@@ -459,7 +462,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(package-selected-packages (quote (multi-web-mode wgrep helm-swoop migemo helm)))
+ '(package-selected-packages
+   (quote
+    (rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
