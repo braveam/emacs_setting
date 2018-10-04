@@ -1,6 +1,6 @@
-;;; $BF|K\8l4D6-@_Dj(B
+;;; 日本語環境設定
 (set-language-environment "Japanese")
-(prefer-coding-system 'utf-8) ;; $B%G%U%)%k%H(B
+(prefer-coding-system 'utf-8) ;; デフォルト
 (modify-coding-system-alist 'file "\\.rb\\'" 'utf-8)                ;; Ruby
 (modify-coding-system-alist 'file "\\.erb\\'" 'utf-8)               ;; html.erb
 (modify-coding-system-alist 'file "\\.html?\\'" 'utf-8)             ;; html, htm
@@ -17,49 +17,49 @@
 ;; IME
 ;;(setq default-input-method "W32-IME")
 ;;(setq-default w32-ime-mode-line-state-indicator "[--]")
-;;(setq w32-ime-mode-line-state-indicator-list '("[--]" "[$B$"(B]" "[--]"))
+;;(setq w32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[--]"))
 ;;(w32-ime-initialize)
-;; $BF|K\8lF~NO;~$K%+!<%=%k$N?'$rJQ$($k@_Dj(B ($B?'$OE,59JQ$($F$/$@$5$$(B)
+;; 日本語入力時にカーソルの色を変える設定 (色は適宜変えてください)
 (add-hook 'w32-ime-on-hook '(lambda () (set-cursor-color "coral4")))
 (add-hook 'w32-ime-off-hook '(lambda () (set-cursor-color "black")))
 
-;; $B%_%K%P%C%U%!$K0\F0$7$?:]$O:G=i$KF|K\8lF~NO$,L58z$J>uBV$K$9$k(B
+;; ミニバッファに移動した際は最初に日本語入力が無効な状態にする
 (add-hook 'minibuffer-setup-hook 'deactivate-input-method)
 
-;; isearch $B$K0\9T$7$?:]$KF|K\8lF~NO$rL58z$K$9$k(B
+;; isearch に移行した際に日本語入力を無効にする
 (add-hook 'isearch-mode-hook '(lambda ()
                                 (deactivate-input-method)
                                 (setq w32-ime-composition-window (minibuffer-window))))
 (add-hook 'isearch-mode-end-hook '(lambda () (setq w32-ime-composition-window nil)))
 
-;; helm $B;HMQCf$KF|K\8lF~NO$rL58z$K$9$k(B
+;; helm 使用中に日本語入力を無効にする
 (advice-add 'helm :around '(lambda (orig-fun &rest args)
                              (let ((select-window-functions nil)
                                    (w32-ime-composition-window (minibuffer-window)))
                                (deactivate-input-method)
                                (apply orig-fun args))))
 
-;;; $B1Q?t%b!<%I4XO"(B
-;;; emacs $B5/F0;~$O1Q?t%b!<%I$+$i;O$a$k(B
+;;; 英数モード関連
+;;; emacs 起動時は英数モードから始める
 ;(add-hook 'after-init-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
-;;; minibuffer $BFb$O1Q?t%b!<%I$K$9$k(B
+;;; minibuffer 内は英数モードにする
 ;(add-hook 'minibuffer-setup-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
-;;; [migemo]isearch $B$N$H$-(B IME $B$r1Q?t%b!<%I$K$9$k(B
+;;; [migemo]isearch のとき IME を英数モードにする
 										;(add-hook 'isearch-mode-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
 
-;;; $B%^%&%9%+!<%=%k$r>C$9@_Dj(B
+;;; マウスカーソルを消す設定
 (setq w32-hide-mouse-on-key t)
 (setq w32-hide-mouse-timeout 5000)
 
-;; $B%S!<%W2;$r>C$9(B
+;; ビープ音を消す
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
 
-;; TAB$B$O%9%Z!<%9#48DJ,(B
+;; TABはスペース４個分
 (setq-default tab-width 4)
 (setq-default default-tab-width 4)
 
-;;; $B=i4|%U%l!<%`$N@_Dj(B
+;;; 初期フレームの設定
 (setq default-frame-alist
       (append (list
             '(foreground-color . "black")
@@ -76,14 +76,14 @@
             )
             default-frame-alist))
 
-;;;; $B%m!<%I%Q%9(B
+;;;; ロードパス
 (add-to-list 'load-path "~/emacs/lisp/")
 
 ;; 
 (setq default-directory "~/") 
 (setq command-line-default-directory "~/")
 
-;; melpa$B%Q%C%1!<%8(B
+;; melpaパッケージ
 (require 'package) ;; You might already have this line
 ;(add-to-list 'package-archives
 ;             '("melpa" . "http://melpa.org/packages/"))
@@ -98,7 +98,7 @@
         ("org" . "http://orgmode.org/elpa/")))
 
 
-;;; $B%$%s%G%s%H%O%$%i%$%H(B
+;;; インデントハイライト
 ;(add-to-list 'load-path "~/emacs/lisp/Highlight-Indentation-for-Emacs")
 ;(require 'highlight-indentation)
 ;(setq highlight-indentation-offset 2)
@@ -106,23 +106,23 @@
 ;(set-face-background 'highlight-indentation-face "LightYellow1")
 ;(set-face-background 'highlight-indentation-current-column-face "AntiqueWhite1")
 ;
-;; highlight-indentation-mode $B$,8F$P$l$?$i(B highlight-indentation-current-column-mode $B$b<B9T$9$k(B
+;; highlight-indentation-mode が呼ばれたら highlight-indentation-current-column-mode も実行する
 ;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
 
-;; ruby$B4D6-@_Dj(B
+;; ruby環境設定
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/rbenv-20141120.749/rbenv.el"))
 (require 'rbenv)
 (global-rbenv-mode)
 (setq rbenv-installation-dir "~/.rbenv")
 
-; c-mode, d-mode $B6&DL(B
+; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
   (c-set-style "linux")
   (setq tab-width 4)
   (setq c-basic-offset tab-width)
-  ;(c-toggle-auto-hungry-state 1)  ;; $B%;%s%F%s%9$N=*N;$G$"$k(B ';' $B$rF~NO$7$?$i!"<+F02~9T(B+$B%$%s%G%s%H(B
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET $B%-!<$G<+F02~9T(B+$B%$%s%G%s%H(B
-  (local-unset-key "\C-c\C-w") ; subword-mode$B@Z$jBX$($rL58z2=(B
+  ;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+  (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
+  (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
   (gtags-mode 1)
   (add-to-list 'ac-sources 'ac-source-gtags)
 )
@@ -139,7 +139,7 @@
 
 (add-hook 'd-mode-hook 'my-c-mode-hook)
 
-;; .ino $B$r(Bc-mode$B$G3+$/(B
+;; .ino をc-modeで開く
 (setq auto-mode-alist
       (append '(("\\.ino$" . c++-mode))
               auto-mode-alist))
@@ -162,7 +162,7 @@
   (highlight-indentation-mode)
 )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
-; $B?'$N@_Dj(B
+; 色の設定
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -178,10 +178,10 @@
  '(web-mode-html-tag-face ((t (:foreground "#E6B422" :weight bold))))
  '(web-mode-server-comment-face ((t (:foreground "#D9333F"))))
  '(web-mode-symbol-face ((t (:foreground "blue")))))
-; $B%O%$%i%$%H?'$N@_Dj(B
+; ハイライト色の設定
 (eval-after-load "web-mode"
   '(set-face-background 'web-mode-current-element-highlight-face "blue"))
-; $B%-!<$,$+$V$k$N$GL58z2=(B
+; キーがかぶるので無効化
 (define-key web-mode-map (kbd "\C-c\C-w") nil)
 
 ;; ruby-mode
@@ -199,7 +199,7 @@
 (require 'inf-ruby)
 (defalias 'pry 'inf-ruby)
 (setq inf-ruby-default-implementation "pry")
-; $B%-!<$,$+$V$k$N$GL58z2=(B
+; キーがかぶるので無効化
 (define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
 
 ;; gnu global
@@ -212,15 +212,15 @@
          (local-set-key "\C-t" 'gtags-pop-stack)
          ))
 
-;; $B%U%!%$%k$H%b!<%I$N4XO"IU$1(B
+;; ファイルとモードの関連付け
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
 (add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
 
-;; ;;; $B0u:~$N@_Dj(B
-;; ;; $B$3$N@_Dj$G(B M-x print-buffer RET $B$J$I$G$N0u:~$,$G$-$k$h$&$K$J$j$^$9(B
+;; ;;; 印刷の設定
+;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
 ;; ;;
-;; ;;  notepad $B$KM?$($k%Q%i%a!<%?$N7A<0$N@_Dj(B
+;; ;;  notepad に与えるパラメータの形式の設定
 ;; (define-process-argument-editing "notepad"
 ;;   (lambda (x) (general-process-argument-editing-function x nil t)))
 ;;
@@ -230,8 +230,8 @@
 ;;   (interactive)
 ;;   (let ((tmpfile (convert-standard-filename (buffer-name)))
 ;;        (w32-start-process-show-window t)
-;;        ;; $B$b$7!"(Bdos $BAk$,8+$($F$$$d$J?M$O>e5-$N(B `t' $B$r(B `nil' $B$K$7$^$9(B
-;;        ;; $B$?$@$7!"(B`nil' $B$K$9$k$H(B Meadow $B$,8G$^$k4D6-$b$"$k$+$b$7$l$^$;$s(B
+;;        ;; もし、dos 窓が見えていやな人は上記の `t' を `nil' にします
+;;        ;; ただし、`nil' にすると Meadow が固まる環境もあるかもしれません
 ;;        (coding-system-for-write w32-system-coding-system))
 ;;     (while (string-match "[/\\]" tmpfile)
 ;;      (setq tmpfile (replace-match "_" t nil tmpfile)))
@@ -244,53 +244,53 @@
 ;;
 ;; (setq print-region-function 'w32-print-region)
 
-;; ;;; fakecygpty $B$N@_Dj(B
-;; ;; $B$3$N@_Dj$G(B cygwin $B$N2>A[C<Kv$rMW5a$9$k%W%m%0%i%`$r(B Meadow $B$+$i(B
-;; ;; $B07$($k$h$&$K$J$j$^$9(B
+;; ;;; fakecygpty の設定
+;; ;; この設定で cygwin の仮想端末を要求するプログラムを Meadow から
+;; ;; 扱えるようになります
 ;; (setq mw32-process-wrapper-alist
 ;;       '(("/\\(bash\\|tcsh\\|svn\\|ssh\\|gpg[esvk]?\\)\\.exe" .
 ;;       (nil . ("fakecygpty.exe" . set-process-connection-type-pty)))))
 
-;; $BD9$$9T$N@^$jJV$7$r(B t:$B$7$J$$(B nil:$B$9$k(B
+;; 長い行の折り返しを t:しない nil:する
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows t)
 
-;; buffer list $BI=<(8e%+!<%=%k$r$=$3$K0\F0$9$k(B
+;; buffer list 表示後カーソルをそこに移動する
 (define-key ctl-x-map "\C-b" 'buffer-menu)
 
-;; $B"-$r2!$7$F$b2~9T$7$J$$$h$&$K$9$k(B
+;; ↓を押しても改行しないようにする
 (setq next-line-add-newlines nil)
 
-;; $B>o$K3g8L$NBP1~$r%O%$%i%$%H$9$k(B
+;; 常に括弧の対応をハイライトする
 (show-paren-mode t)
 
-;; $BD9$$%Q%9L>$N%U%!%$%k%*!<%W%s$G%P%C%U%!%j%5%$%:(B
+;; 長いパス名のファイルオープンでバッファリサイズ
 ;;(resize-minibuffer-mode t)
 
-;; $B<+F0?eJ?%9%/%m!<%k(B
+;; 自動水平スクロール
 ;;(hscroll-global-mode t)
 ;;(hscroll-mode t)
 
-;; $B%+!<%=%k9TI=<((B
+;; カーソル行表示
 (line-number-mode t)
 
-;; $B%+!<%=%k7e?tI=<((B
+;; カーソル桁数表示
 (column-number-mode t)
 
-;; C-k$B$G2~9T$b%+%C%H(B
+;; C-kで改行もカット
 (setq kill-whole-line t)
 
-;; $B=PNO$,E~Ce$9$k$?$S$K=PNO$KDI=>$9$k$h$&$K%3%s%Q%$%k%P%C%U%!$r>o$K%9%/%m!<%k(B
+;; 出力が到着するたびに出力に追従するようにコンパイルバッファを常にスクロール
 (setq compilation-scroll-output t)
 
-;; $B%o!<%I%3%T!<(B
+;; ワードコピー
 (defun kill-ring-save-current-word ()
 "Save current word to kill ring as if killed, but don't kill it."
 (interactive)
 (kill-new (current-word)))
 (global-set-key "\C-c\C-w" 'kill-ring-save-current-word)
 
-;; $B%+%9%?%^%$%:%3%s%Q%$%k(B
+;; カスタマイズコンパイル
 (defun yrecompile()
   (interactive)
   (if(and
@@ -308,15 +308,15 @@
     )
 )
 
-;; $B%3%a%s%H(B
-;; $BJ#?t6H%3%a%s%H(B
+;; コメント
+;; 複数業コメント
 (defun insert-comment-function ()
   (interactive)
   (insert "/**
 *
 */"))
 
-;; $B#19T%3%a%s%H(B
+;; １行コメント
 (defun insert-line-comment-function ()
   (interactive)
   (insert "///< @todo ")
@@ -326,12 +326,12 @@
 ;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
 (ac-config-default)
 (global-auto-complete-mode t)
-(setq ac-use-menu-map t) ;; $B%a%K%e!<I=<(;~$N$_$KM-8z$K$J$k%-!<%^%C%W(B(ac-menu-map)$B$rMxMQ(B
+(setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
 (setq ac-use-quick-help t)
 (setq ac-quick-help-delay 0.5)
 (setq ac-menu-height 20)
-(setq ac-auto-show-menu 0.1)    ;; 0.1$BIC8e$K<+F0E*$KI=<((B
-(setq ac-use-fuzzy t) ;; $B[#Kf%^%C%A(B
+(setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
+(setq ac-use-fuzzy t) ;; 曖昧マッチ
 (ac-set-trigger-key "TAB")
 (add-to-list 'ac-ignores "/")
 (add-to-list 'ac-ignores "//")
@@ -369,14 +369,14 @@
 
 ;; helm
 (helm-mode +1)
-;; $B%U%!%$%kMzNr(B
+;; ファイル履歴
 (global-set-key [f7] 'helm-recentf)
 (global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
 
 ;(define-key helm-map (kbd "<tab>") 'helm-next-source)
 (define-key helm-map (kbd "<tab>") 'dabbrev-expand)
 (define-key helm-map (kbd "<right>") 'helm-select-action)
-; TAB$B$GJd40(B
+; TABで補完
 (define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
 
 ;; helm-swoop
@@ -410,15 +410,15 @@
 ;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-console)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $B%-!<%P%$%s%I(B
+;; キーバインド
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; mac$B%P%C%/%9%i%C%7%e%-!<BP:v(B
-(define-key global-map [?\(J\(B] [?\\])
-(define-key global-map [?\C-(J\(B] [?\C-\\])
-(define-key global-map [?\M-(J\(B] [?\M-\\])
-(define-key global-map [?\C-\M-(J\(B] [?\C-\M-\\])
+;; macバックスラッシュキー対策
+(define-key global-map [?\¥] [?\\])
+(define-key global-map [?\C-¥] [?\C-\\])
+(define-key global-map [?\M-¥] [?\M-\\])
+(define-key global-map [?\C-\M-¥] [?\C-\M-\\])
 
-;; C-h$B$r%P%C%/%9%Z!<%9$KJQ99(B
+;; C-hをバックスペースに変更
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key "\C-h" nil)
 
@@ -427,58 +427,58 @@
 (global-set-key [home] 'beginning-of-buffer)
 (global-set-key [end] 'end-of-buffer)
 
-;; $B%&%#%s%I%&0\F0(B
+;; ウィンドウ移動
 (global-set-key [f4] 'other-window)
 (global-set-key [S-f4] 'previous-multiframe-window)
 
-;;$BI=<(NN0h3HBg(B
+;;表示領域拡大
 (global-set-key [C-up] '(lambda() (interactive)(enlarge-window -1)) )
 (global-set-key [C-down] '(lambda() (interactive)(enlarge-window +1)) )
 (global-set-key [C-left] '(lambda() (interactive)(enlarge-window-horizontally -1)))
 (global-set-key [C-right] '(lambda() (interactive)(enlarge-window-horizontally +1)))
 
-;; $B%(%i!<%8%c%s%W(B
+;; エラージャンプ
 (global-set-key [C-f10] 'next-error)
 (global-set-key [C-f11] 'previous-error)
 
-;; $BBP1~$9$k3g8L$K%8%c%s%W(B
+;; 対応する括弧にジャンプ
 (global-set-key "\M-m" 'blink-matching-open)
 
-;; $B>.J8;z2=%+%9%?%^%$%:!JD>A0$N%o!<%I$rBP>]$K$9$k!K(B
+;; 小文字化カスタマイズ（直前のワードを対象にする）
 (global-unset-key "\M-l")
 (global-set-key "\M-l" (lambda() (interactive)(downcase-word -1)))
-;; $BBgJ8;z2=%+%9%?%^%$%:!JD>A0$N%o!<%I$rBP>]$K$9$k!K(B
+;; 大文字化カスタマイズ（直前のワードを対象にする）
 (global-unset-key "\M-u")
 (global-set-key "\M-u" (lambda() (interactive)(upcase-word -1)))
 
-;; $B%-!<%\!<%I%^%/%m(B
+;; キーボードマクロ
 (global-set-key [f9] 'start-kbd-macro)
 (global-set-key [f10] 'end-kbd-macro)
 (global-set-key [f12] 'call-last-kbd-macro)
 
-;; $B%U%!%$%k$N:FFI$_9~$_(B
+;; ファイルの再読み込み
 (global-set-key [C-S-f3] 'revert-buffer)
 
-;; $B%3%s%Q%$%k(B
+;; コンパイル
 (global-set-key [C-f9] 'yrecompile)
 (global-set-key [C-M-f9] 'compile)
 
-;; $B:G6a;H$C$?%U%!%$%k(B
+;; 最近使ったファイル
 (require 'recentf)
-(setq recentf-max-saved-items 50)            ;; recentf $B$KJ]B8$9$k%U%!%$%k$N?t(B
+(setq recentf-max-saved-items 50)            ;; recentf に保存するファイルの数
 (recentf-mode 1)
 ;;(global-set-key [f7] 'recentf-open-files)
 
-;; $B%3%a%s%H(B
+;; コメント
 (global-set-key "\M-]" 'insert-comment-function)
 (global-set-key "\M-[" 'insert-line-comment-function)
 
-;; $B%U%)%s%H%5%$%:JQ99%-!<(B
-; C-+ $B$G3HBg(B
+;; フォントサイズ変更キー
+; C-+ で拡大
 (global-set-key [(control ?\;)] (lambda () (interactive) (text-scale-increase 1)))
-; C-- $B$G=L>.(B
+; C-- で縮小
 (global-set-key [(control ?-)] (lambda () (interactive) (text-scale-decrease 1)))
-; C-0 $B$G%G%U%)%k%H$KLa$9(B
+; C-0 でデフォルトに戻す
 (global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))
 
 ;;;
