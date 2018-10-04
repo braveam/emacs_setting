@@ -14,7 +14,6 @@
 (modify-coding-system-alist 'file "\\.[eh]rl\\'" 'utf-8)            ;; Erlang
 (modify-coding-system-alist 'file "\\.exs?\\'" 'utf-8)              ;; Elixir
 
-
 ;; IME
 ;;(setq default-input-method "W32-IME")
 ;;(setq-default w32-ime-mode-line-state-indicator "[--]")
@@ -110,6 +109,12 @@
 ;; highlight-indentation-mode が呼ばれたら highlight-indentation-current-column-mode も実行する
 ;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
 
+;; ruby環境設定
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/rbenv-20141120.749/rbenv.el"))
+(require 'rbenv)
+(global-rbenv-mode)
+(setq rbenv-installation-dir "~/.rbenv")
+
 ; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
   (c-set-style "linux")
@@ -157,8 +162,6 @@
   (highlight-indentation-mode)
 )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
-(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
 ; 色の設定
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -182,7 +185,22 @@
 (define-key web-mode-map (kbd "\C-c\C-w") nil)
 
 ;; ruby-mode
-(add-hook 'ruby-mode-hook 'highlight-indentation-mode)
+(add-hook 'ruby-mode-hook '(lambda ()
+                             '(highlight-indentation-mode)
+                             (robe-mode)
+                             ))
+
+; robe
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
+(add-hook 'robe-mode-hook 'ac-robe-setup)
+
+; pry
+(require 'inf-ruby)
+(defalias 'pry 'inf-ruby)
+(setq inf-ruby-default-implementation "pry")
+; キーがかぶるので無効化
+(define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
 
 ;; gnu global
 (autoload 'gtags-mode "gtags" "" t)
@@ -193,6 +211,11 @@
          (local-set-key "\M-s" 'gtags-find-symbol)
          (local-set-key "\C-t" 'gtags-pop-stack)
          ))
+
+;; ファイルとモードの関連付け
+(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
+(add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -299,22 +322,26 @@
   (insert "///< @todo ")
 )
 
-;;; auto-complete
-;;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
-;(ac-config-default)
-;(global-auto-complete-mode t)
-;(setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
-;
-;(setq ac-use-quick-help t)
-;(setq ac-quick-help-delay 0.5)
-;(setq ac-menu-height 20)
-;(setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
-;(ac-set-trigger-key "TAB")
-;(add-to-list 'ac-ignores "/")
-;(add-to-list 'ac-ignores "//")
-;(add-to-list 'ac-ignores "///")
-;(add-to-list 'ac-ignores "////")
-;(define-key ac-mode-map (kbd "C-/") 'auto-complete)
+;; auto-complete
+;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+(ac-config-default)
+(global-auto-complete-mode t)
+(setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
+(setq ac-use-quick-help t)
+(setq ac-quick-help-delay 0.5)
+(setq ac-menu-height 20)
+(setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
+(setq ac-use-fuzzy t) ;; 曖昧マッチ
+(ac-set-trigger-key "TAB")
+(add-to-list 'ac-ignores "/")
+(add-to-list 'ac-ignores "//")
+(add-to-list 'ac-ignores "///")
+(add-to-list 'ac-ignores "////")
+(define-key ac-mode-map (kbd "M-/") 'auto-complete)
+(define-key ac-mode-map (kbd "M-_") 'ac-start)
+;(define-key ac-mode-map [M-f1] 'ac-quick-help)
+(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
+;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
 
 ;;; grep-edit
 ;(require 'grep-edit)
@@ -342,8 +369,9 @@
 
 ;; helm
 (helm-mode +1)
-; ファイル履歴
+;; ファイル履歴
 (global-set-key [f7] 'helm-recentf)
+(global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
 
 ;(define-key helm-map (kbd "<tab>") 'helm-next-source)
 (define-key helm-map (kbd "<tab>") 'dabbrev-expand)
@@ -464,7 +492,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (rinari multi-web-mode wgrep helm-swoop migemo helm)))
+    (robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
