@@ -72,7 +72,7 @@
             '(mouse-color . "white")
             '(cursor-color . "black")
 ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-            '(width . 186)
+            '(width . 188)
             '(height . 51)
             '(top . 0)
             '(left . 0)
@@ -379,7 +379,6 @@
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
 
-
 ;;; grep-edit
 ;(require 'grep-edit)
 
@@ -452,6 +451,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; キーバインド
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 無効化
+(define-key emacs-lisp-mode-map (kbd "C-M-x") nil)
+
 ;; macバックスラッシュキー対策
 (define-key global-map [?\¥] [?\\])
 (define-key global-map [?\C-¥] [?\C-\\])
