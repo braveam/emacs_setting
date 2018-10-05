@@ -187,18 +187,22 @@
 ; キーがかぶるので無効化
 (define-key web-mode-map (kbd "\C-c\C-w") nil)
 
-;; ruby-mode
+;;; ruby-mode
 (add-hook 'ruby-mode-hook '(lambda ()
                              '(highlight-indentation-mode)
                              (robe-mode)
                              ))
 
-; pry
+;; pry
 (require 'inf-ruby)
 (defalias 'pry 'inf-ruby)
 (setq inf-ruby-default-implementation "pry")
 ; キーがかぶるので無効化
 (define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
+
+;; ruby-electric
+(eval-after-load "ruby-mode"
+  '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
 
 ;; gnu global
 (autoload 'gtags-mode "gtags" "" t)
@@ -540,7 +544,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
