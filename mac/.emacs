@@ -72,7 +72,7 @@
 			   '(mouse-color . "white")
 			   '(cursor-color . "black")
 			   ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-			   '(width . 189)
+			   '(width . 190)
 			   '(height . 51)
 			   '(top . 0)
 			   '(left . 0)
@@ -82,7 +82,7 @@
 ;;;; ロードパス
 (add-to-list 'load-path "~/emacs/lisp/")
 
-;; 
+;;; デフォルトディレクトリ
 (setq default-directory "~/") 
 (setq command-line-default-directory "~/")
 
@@ -193,7 +193,7 @@
                              (robe-mode)
                              ))
 
-;; pry
+;;; inf-ruby
 (require 'inf-ruby)
 (defalias 'pry 'inf-ruby)
 (setq inf-ruby-default-implementation "pry")
@@ -384,6 +384,11 @@
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 (eval-after-load 'company
   '(push 'company-robe company-backends))
+(add-hook 'robe-mode-hook '(lambda()
+							 (robe-start)
+							 )
+		  )
+
 
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
