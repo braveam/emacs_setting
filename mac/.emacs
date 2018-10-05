@@ -1,3 +1,5 @@
+(setq debug-on-error t)
+
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
@@ -69,7 +71,7 @@
             '(mouse-color . "white")
             '(cursor-color . "black")
 ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-            '(width . 180)
+            '(width . 182)
             '(height . 50)
             '(top . 0)
             '(left . 0)
@@ -189,11 +191,6 @@
                              '(highlight-indentation-mode)
                              (robe-mode)
                              ))
-
-; robe
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
-(add-hook 'robe-mode-hook 'ac-robe-setup)
 
 ; pry
 (require 'inf-ruby)
@@ -322,26 +319,65 @@
   (insert "///< @todo ")
 )
 
-;; auto-complete
-;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
-(ac-config-default)
-(global-auto-complete-mode t)
-(setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
-(setq ac-use-quick-help t)
-(setq ac-quick-help-delay 0.5)
-(setq ac-menu-height 20)
-(setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
-(setq ac-use-fuzzy t) ;; 曖昧マッチ
-(ac-set-trigger-key "TAB")
-(add-to-list 'ac-ignores "/")
-(add-to-list 'ac-ignores "//")
-(add-to-list 'ac-ignores "///")
-(add-to-list 'ac-ignores "////")
-(define-key ac-mode-map (kbd "M-/") 'auto-complete)
-(define-key ac-mode-map (kbd "M-_") 'ac-start)
-;(define-key ac-mode-map [M-f1] 'ac-quick-help)
-(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
-;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
+;; ;; auto-complete
+;; (require 'auto-complete-config)
+;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20170125.245/dict")
+;; ;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+;; (ac-config-default)
+;; (global-auto-complete-mode t)
+;; (setq ac-use-menu-map t) ;; メニュー表示時のみに有効になるキーマップ(ac-menu-map)を利用
+;; (setq ac-use-quick-help t)
+;; (setq ac-quick-help-delay 0.5)
+;; (setq ac-menu-height 20)
+;; (setq ac-auto-show-menu 0.1)    ;; 0.1秒後に自動的に表示
+;; ;(setq ac-use-fuzzy t) ;; 曖昧マッチ
+;; (ac-set-trigger-key "TAB")
+;; (add-to-list 'ac-ignores "/")
+;; (add-to-list 'ac-ignores "//")
+;; (add-to-list 'ac-ignores "///")
+;; (add-to-list 'ac-ignores "////")
+;; (define-key ac-mode-map (kbd "M-/") 'auto-complete)
+;; (define-key ac-menu-map (kbd ".") 'ac-complete)
+;; (define-key ac-menu-map (kbd "SPC") 'ac-complete)
+;; (define-key ac-mode-map (kbd "M-_") 'ac-start)
+;; ;(define-key ac-mode-map [M-f1] 'ac-quick-help)
+;; (define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
+;; ;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
+
+; robe
+;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
+;(add-hook 'robe-mode-hook 'ac-robe-setup)
+
+;; company
+(require 'company)
+(global-company-mode) ; 全バッファで有効にする 
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+;(define-key ac-mode-map (kbd "M-/") 'auto-complete)
+;(define-key ac-menu-map (kbd ".") 'ac-complete)
+;(define-key ac-menu-map (kbd "SPC") 'ac-complete)
+;(define-key ac-mode-map (kbd "M-_") 'ac-start)
+;(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
+(global-set-key (kbd "M-/") 'company-complete)
+(global-set-key (kbd "M-_") 'company-complete)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-search-map (kbd "C-n") 'company-select-next)
+(define-key company-search-map (kbd "C-p") 'company-select-previous)
+;; C-sで絞り込む
+(define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+;; TABで候補を設定
+(define-key company-active-map (kbd "C-i") 'company-complete-selection)
+(define-key company-active-map (kbd ".") 'company-complete-selection)
+(define-key company-active-map (kbd "SPC") 'company-complete-selection)
+;; 各種メジャーモードでも C-M-iで company-modeの補完を使う
+(define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)
+
+; company for robe
+(eval-after-load 'company
+  '(push 'company-robe company-backends))
 
 ;;; grep-edit
 ;(require 'grep-edit)
@@ -408,6 +444,9 @@
 ;(define-key projectile-rails-mode-map (kbd "C-c ; f v") 'projectile-rails-find-current-view)
 ;(define-key projectile-rails-mode-map (kbd "C-c ; f s") 'projectile-rails-find-current-spec)
 ;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-console)
+
+;; eldoc
+;(add-hook emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; キーバインド
@@ -492,7 +531,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
