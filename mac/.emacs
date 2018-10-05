@@ -377,6 +377,7 @@
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; company for robe
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 (eval-after-load 'company
   '(push 'company-robe company-backends))
 
