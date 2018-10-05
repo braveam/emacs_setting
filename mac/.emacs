@@ -65,19 +65,19 @@
 ;;; 初期フレームの設定
 (setq default-frame-alist
       (append (list
-            '(foreground-color . "black")
-            '(background-color . "LemonChiffon")
-;;            '(background-color . "gray")
-            '(border-color . "black")
-            '(mouse-color . "white")
-            '(cursor-color . "black")
-;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-            '(width . 188)
-            '(height . 51)
-            '(top . 0)
-            '(left . 0)
-            )
-            default-frame-alist))
+			   '(foreground-color . "black")
+			   '(background-color . "LemonChiffon")
+			   ;;            '(background-color . "gray")
+			   '(border-color . "black")
+			   '(mouse-color . "white")
+			   '(cursor-color . "black")
+			   ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+			   '(width . 189)
+			   '(height . 51)
+			   '(top . 0)
+			   '(left . 0)
+			   )
+              default-frame-alist))
 
 ;;;; ロードパス
 (add-to-list 'load-path "~/emacs/lisp/")
@@ -148,11 +148,11 @@
               auto-mode-alist))
 
 ;;; yaml-mode
-;(require 'yaml-mode)
-;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+;;(require 'yaml-mode)
+;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
 
-;; web-mode
+;;; web-mode
 (require 'web-mode)
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -209,6 +209,10 @@
          (local-set-key "\M-s" 'gtags-find-symbol)
          (local-set-key "\C-t" 'gtags-pop-stack)
          ))
+
+;;; aggressive-indent
+(global-aggressive-indent-mode 1)
+;;(add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 
 ;; ファイルとモードの関連付け
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
@@ -535,7 +539,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
