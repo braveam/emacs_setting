@@ -453,6 +453,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 無効化
 (define-key emacs-lisp-mode-map (kbd "C-M-x") nil)
+(global-set-key (kbd "C-z") nil)
 
 ;; macバックスラッシュキー対策
 (define-key global-map [?\¥] [?\\])
