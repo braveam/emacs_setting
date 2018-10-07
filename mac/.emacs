@@ -65,18 +65,18 @@
 ;;; 初期フレームの設定
 (setq default-frame-alist
       (append (list
-			   '(foreground-color . "black")
-			   '(background-color . "LemonChiffon")
-			   ;;            '(background-color . "gray")
-			   '(border-color . "black")
-			   '(mouse-color . "white")
-			   '(cursor-color . "black")
-			   ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-			   '(width . 190)
-			   '(height . 51)
-			   '(top . 0)
-			   '(left . 0)
-			   )
+			         '(foreground-color . "black")
+			         '(background-color . "LemonChiffon")
+			         ;;            '(background-color . "gray")
+			         '(border-color . "black")
+			         '(mouse-color . "white")
+			         '(cursor-color . "black")
+			         ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+			         '(width . 190)
+			         '(height . 51)
+			         '(top . 0)
+			         '(left . 0)
+			         )
               default-frame-alist))
 
 ;;;; ロードパス
@@ -153,6 +153,7 @@
 ;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
 
 ;;; web-mode
+(require 'ac-html-bootstrap)
 (require 'web-mode)
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -162,10 +163,16 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
-  (highlight-indentation-mode)
-)
+  (add-to-list 'company-backends '(company-web-html
+                                   company-css
+                                   company-web-jade
+                                   company-web-fa+
+                                   ))
+  (company-web-bootstrap+)
+  )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
-; 色の設定
+
+;; 色の設定
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -189,7 +196,7 @@
 
 ;;; ruby-mode
 (add-hook 'ruby-mode-hook '(lambda ()
-                             '(highlight-indentation-mode)
+                             ;;'(highlight-indentation-mode)
                              (robe-mode)
                              ))
 
@@ -377,7 +384,6 @@
 (define-key company-active-map (kbd "(") 'company-complete-selection)
 (define-key company-active-map (kbd ")") 'company-complete-selection)
 (define-key company-active-map (kbd ":") 'company-complete-selection)
-(define-key company-active-map (kbd "SPC") 'company-complete-selection) ; 各種メジャーモードでもcompany-modeの補完を使う
 (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)
 ;; help
 (eval-after-load 'company
@@ -385,12 +391,13 @@
 
 ;; company for robe
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(eval-after-load 'company
-  '(push 'company-robe company-backends))
+;;(eval-after-load 'company
+;;'(push 'company-robe company-backends))
 (add-hook 'robe-mode-hook '(lambda()
-							 (robe-start)
-							 )
-		  )
+                             '(push 'company-robe company-backends)
+					                   (robe-start)
+					                   )
+		      )
 
 
 ;; company quickhelp
@@ -541,6 +548,7 @@
 ; C-0 でデフォルトに戻す
 (global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))
 
+
 ;;;
 ;;; end of file
 ;;;
@@ -552,7 +560,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+    (company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
