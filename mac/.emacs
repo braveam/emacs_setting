@@ -1,6 +1,7 @@
 ;; debug mode
 (setq debug-on-error t)
 
+
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
@@ -118,17 +119,21 @@
 (global-rbenv-mode)
 (setq rbenv-installation-dir "~/.rbenv")
 
-; c-mode, d-mode 共通
+;;; minibuffer
+(define-key minibuffer-local-map (kbd "C-p") 'previous-line-or-history-element)
+(define-key minibuffer-local-map (kbd "C-n") 'next-line-or-history-element)
+
+;;; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
   (c-set-style "linux")
   (setq tab-width 4)
   (setq c-basic-offset tab-width)
-  ;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+										;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
   (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
   (gtags-mode 1)
   (add-to-list 'ac-sources 'ac-source-gtags)
-)
+  )
 
 (add-hook 'c-mode-hook 'my-c-mode-on-init)
 (add-hook 'c++-mode-hook 'my-c-mode-common-init)
@@ -166,9 +171,9 @@
   (add-to-list 'company-backends '(company-web-html
                                    company-css
                                    company-web-jade
-                                   company-web-fa+
                                    ))
   (company-web-bootstrap+)
+  (company-web-fa+)
   )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
@@ -333,7 +338,7 @@
 (defun insert-line-comment-function ()
   (interactive)
   (insert "///< @todo ")
-)
+  )
 
 ;; ;; auto-complete
 ;; (require 'auto-complete-config)
@@ -360,18 +365,21 @@
 ;; (define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
 ;; ;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
 
-; robe
-;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-;(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
-;(add-hook 'robe-mode-hook 'ac-robe-setup)
+;; robe
+;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;;(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
+;;(add-hook 'robe-mode-hook 'ac-robe-setup)
 
-;; company
+;;; company
 (require 'company)
 (global-company-mode) ; 全バッファで有効にする 
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-;(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
+(setq company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-dabbrev-code company-gtags company-etags company-keywords) company-oddmuse company-dabbrev company-capf))
+(add-hook 'after-init-hook #'company-statistics-mode)
+
+;;(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
 (global-set-key (kbd "M-/") 'company-complete)
 (global-set-key (kbd "M-_") 'company-complete)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
@@ -380,19 +388,24 @@
 (define-key company-search-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-s") 'company-filter-candidates)  ; C-sで絞り込む
 (define-key company-active-map (kbd "C-i") 'company-complete-selection) ; TABで候補を設定
-(define-key company-active-map (kbd ".") 'company-complete-selection)
-(define-key company-active-map (kbd "(") 'company-complete-selection)
-(define-key company-active-map (kbd ")") 'company-complete-selection)
-(define-key company-active-map (kbd ":") 'company-complete-selection)
+(define-key company-active-map (kbd ".") '(lambda () (interactive) (cc-selection-with-str ".")) )
+(define-key company-active-map (kbd "(") '(lambda () (interactive) (cc-selection-with-str "(")) )
+(define-key company-active-map (kbd ")") '(lambda () (interactive) (cc-selection-with-str ")")) )
+(define-key company-active-map (kbd ":") '(lambda () (interactive) (cc-selection-with-str ":")) )
 (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)
+
+;; 補完確定と文字列挿入
+(defun cc-selection-with-cc (str)
+  (company-complete-selection)
+  (insert str)
+  )
+
 ;; help
 (eval-after-load 'company
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; company for robe
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-;;(eval-after-load 'company
-;;'(push 'company-robe company-backends))
 (add-hook 'robe-mode-hook '(lambda()
                              '(push 'company-robe company-backends)
 					                   (robe-start)
@@ -560,7 +573,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
