@@ -586,7 +586,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+    (wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
