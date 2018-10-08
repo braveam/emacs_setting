@@ -82,6 +82,19 @@
 
 ;;;; ロードパス
 (add-to-list 'load-path "~/emacs/lisp/")
+;; PATH
+(dolist (dir (list
+	            "/sbin"
+	            "/usr/sbin"
+	            "/bin"
+	            "/usr/bin"
+	            "/usr/local/bin"
+	            (expand-file-name "~/bin")
+	            ))
+  ;; exec-path
+  (when (and (file-exists-p dir) (not (member dir exec-path)))
+    (setenv "PATH" (concat dir ":" (getenv "PATH")))
+    (setq exec-path (append (list dir) exec-path))))
 
 ;;; デフォルトディレクトリ
 (setq default-directory "~/") 
