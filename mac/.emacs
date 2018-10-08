@@ -408,7 +408,7 @@
 (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)
 
 ;; 補完確定と文字列挿入
-(defun cc-selection-with-cc (str)
+(defun cc-selection-with-str (str)
   (company-complete-selection)
   (insert str)
   )
