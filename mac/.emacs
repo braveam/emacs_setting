@@ -1,7 +1,6 @@
 ;; debug mode
 (setq debug-on-error t)
 
-
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
@@ -170,26 +169,6 @@
 ;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 ;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
 
-;;; web-mode
-(require 'ac-html-bootstrap)
-(require 'web-mode)
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq-default tab-width 2 indent-tabs-mode nil)
-  (setq web-mode-html-offset 2)
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-enable-current-element-highlight t)
-  (add-to-list 'company-backends '(company-web-html
-                                   company-css
-                                   company-web-jade
-                                   ))
-  (company-web-bootstrap+)
-  (company-web-fa+)
-  )
-(add-hook 'web-mode-hook 'my-web-mode-hook)
-
 ;; 色の設定
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -209,25 +188,6 @@
 ; ハイライト色の設定
 (eval-after-load "web-mode"
   '(set-face-background 'web-mode-current-element-highlight-face "blue"))
-; キーがかぶるので無効化
-(define-key web-mode-map (kbd "\C-c\C-w") nil)
-
-;;; ruby-mode
-(add-hook 'ruby-mode-hook '(lambda ()
-                             ;;'(highlight-indentation-mode)
-                             (robe-mode)
-                             ))
-
-;;; inf-ruby
-(require 'inf-ruby)
-(defalias 'pry 'inf-ruby)
-(setq inf-ruby-default-implementation "pry")
-; キーがかぶるので無効化
-(define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
-
-;; ruby-electric
-(eval-after-load "ruby-mode"
-  '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
 
 ;; gnu global
 (autoload 'gtags-mode "gtags" "" t)
@@ -392,7 +352,6 @@
 (setq company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-dabbrev-code company-gtags company-etags company-keywords) company-oddmuse company-dabbrev company-capf))
 (add-hook 'after-init-hook #'company-statistics-mode)
 
-;;(define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
 (global-set-key (kbd "M-/") 'company-complete)
 (global-set-key (kbd "M-_") 'company-complete)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
@@ -419,18 +378,62 @@
 
 ;; company for robe
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(add-hook 'robe-mode-hook '(lambda()
-                             '(push 'company-robe company-backends)
-					                   (robe-start)
-					                   )
-		      )
+(add-hook 'robe-mode-hook '(lambda ()
+							 (add-to-list 'company-backends 'company-robe)
+							 (robe-start)
+							 )
+		  )
 
 
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
 
+;;; web-mode
+(require 'ac-html-bootstrap)
+(require 'web-mode)
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq-default tab-width 2 indent-tabs-mode nil)
+  (setq web-mode-html-offset 2)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-element-highlight t)
+  (add-to-list 'company-backends '(company-web-html
+								   company-css
+								   company-web-jade
+								   )
+			   )
+  (company-web-bootstrap+)
+  (company-web-fa+)
+  )
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+
+;; キーがかぶるので無効化
+(define-key web-mode-map (kbd "\C-c\C-w") nil)
+
+;;; ruby-mode
+(add-hook 'ruby-mode-hook '(lambda ()
+                             ;;'(highlight-indentation-mode)
+                             (robe-mode)
+							 ;;'(add-to-list 'company-backends '(company-robe))
+							 ;;(setq company-backends '(company-robe))
+                             ))
+
+;;; inf-ruby
+(require 'inf-ruby)
+(defalias 'pry 'inf-ruby)
+(setq inf-ruby-default-implementation "pry")
+										; キーがかぶるので無効化
+(define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
+
+;; ruby-electric
+(eval-after-load "ruby-mode"
+  '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
+
+
 ;;; grep-edit
-;(require 'grep-edit)
+;;(require 'grep-edit)
 
 ;;; migemo
 (require 'migemo)
