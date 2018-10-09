@@ -44,11 +44,11 @@
 
 ;;; 英数モード関連
 ;;; emacs 起動時は英数モードから始める
-;(add-hook 'after-init-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
+;;(add-hook 'after-init-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
 ;;; minibuffer 内は英数モードにする
-;(add-hook 'minibuffer-setup-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
+;;(add-hook 'minibuffer-setup-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
 ;;; [migemo]isearch のとき IME を英数モードにする
-										;(add-hook 'isearch-mode-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
+;;(add-hook 'isearch-mode-hook '(lambda() (interactive)(set-input-method "japanese-ascii")) )
 
 ;;; マウスカーソルを消す設定
 (setq w32-hide-mouse-on-key t)
@@ -135,12 +135,34 @@
 (define-key minibuffer-local-map (kbd "C-p") 'previous-line-or-history-element)
 (define-key minibuffer-local-map (kbd "C-n") 'next-line-or-history-element)
 
+;;; yasnipet
+;; パスを通す
+(add-to-list 'load-path
+             (expand-file-name "~/.emacs.d/elpa/yasnippet-20181007.2230/"))
+
+;; 自分用・追加用テンプレート -> mysnippetに作成したテンプレートが格納される
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/emacs/yasnippet/mysnippets"
+        "~/emacs/yasnippet/snippets"
+        ))
+
+;; 既存スニペットを挿入する
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;; 新規スニペットを作成するバッファを用意する
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+;; 既存スニペットを閲覧・編集する
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
+
+(yas-global-mode 1)
+
+
 ;;; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
   (c-set-style "linux")
   (setq tab-width 4)
   (setq c-basic-offset tab-width)
-										;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+  ;;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
   (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
   (gtags-mode 1)
@@ -364,6 +386,8 @@
 (define-key company-active-map (kbd "(") '(lambda () (interactive) (cc-selection-with-str "(")) )
 (define-key company-active-map (kbd ")") '(lambda () (interactive) (cc-selection-with-str ")")) )
 (define-key company-active-map (kbd ":") '(lambda () (interactive) (cc-selection-with-str ":")) )
+(define-key company-active-map (kbd "=") '(lambda () (interactive) (cc-selection-with-str "=")) )
+(define-key company-active-map (kbd ">") '(lambda () (interactive) (cc-selection-with-str ">")) )
 (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)
 
 ;; 補完確定と文字列挿入
@@ -419,6 +443,18 @@
 							 ;;'(add-to-list 'company-backends '(company-robe))
 							 ;;(setq company-backends '(company-robe))
                              ))
+
+;;; rhtml-mode
+(add-hook 'rhtml-mode-hook '(lambda ()
+                              (add-to-list 'company-backends '(company-web-html
+								                               company-css
+								                               company-web-jade
+								                               )
+			                               )
+                              (company-web-bootstrap+)
+                              (company-web-fa+)
+                              )
+          )
 
 ;;; inf-ruby
 (require 'inf-ruby)
@@ -589,7 +625,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+    (yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
