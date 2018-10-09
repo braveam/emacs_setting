@@ -139,14 +139,12 @@
 ;; パスを通す
 (add-to-list 'load-path
              (expand-file-name "~/.emacs.d/elpa/yasnippet-20181007.2230/"))
-
 ;; 自分用・追加用テンプレート -> mysnippetに作成したテンプレートが格納される
 (require 'yasnippet)
 (setq yas-snippet-dirs
       '("~/emacs/yasnippet/mysnippets"
         "~/emacs/yasnippet/snippets"
         ))
-
 ;; 既存スニペットを挿入する
 (define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
 ;; 新規スニペットを作成するバッファを用意する
@@ -326,8 +324,8 @@
 ;; (define-key ac-mode-map (kbd "C-?") 'ac-last-quick-help)
 ;; ;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
 
-;; robe
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;; robe for auto-complete
+;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 ;;(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
 ;;(add-hook 'robe-mode-hook 'ac-robe-setup)
 
@@ -337,15 +335,28 @@
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-(setq company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-dabbrev-code company-gtags company-etags company-keywords) company-oddmuse company-dabbrev company-capf))
-(add-hook 'after-init-hook #'company-statistics-mode)
+(setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-web-html company-css company-web-jade company-robe) (company-elisp company-dabbrev-code) company-dabbrev-code (company-gtags company-etags company-keywords) company-dabbrev company-capf))
+
+;;(setq company-dabbrev-other-buffers 'all)
+;;(setq company-dabbrev-code-everywhere t)
+(setq company-dabbrev-code-other-buffers (quote all)) ; 全バッファから補完
+;;(setq company-dabbrev-code-modes t)
+(setq company-dabbrev-ignore-buffers "nil")
+;;(setq company-transformers '(company-sort-by-occurrence))
+;;(add-hook 'after-init-hook #'company-statistics-mode)
+;;(setq company-require-match nil)
+;;(setq company-auto-complete #'my-company-visible-and-explicit-action-p)
+;;(setq company-frontends '(company-echo-metadata-frontend
+;;company-pseudo-tooltip-unless-just-one-frontend-with-delay
+;;company-preview-frontend))
 
 (global-set-key (kbd "M-/") 'company-complete)
-(global-set-key (kbd "M-_") 'company-complete)
-(define-key company-active-map (kbd "C-n") 'company-select-next)
-(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(global-set-key (kbd "M-_") 'company-other-backend) ; companyバックエンド切り替え
 (define-key company-search-map (kbd "C-n") 'company-select-next)
 (define-key company-search-map (kbd "C-p") 'company-select-previous)
+(define-key company-search-map (kbd "<tab>") 'company-complete-selection)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-s") 'company-filter-candidates)  ; C-sで絞り込む
 (define-key company-active-map (kbd "C-i") 'company-complete-selection) ; TABで候補を設定
 (define-key company-active-map (kbd ".") '(lambda () (interactive) (cc-selection-with-str ".")) )
@@ -367,13 +378,12 @@
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; company for robe
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(add-hook 'robe-mode-hook '(lambda ()
-							 (add-to-list 'company-backends 'company-robe)
-							 (robe-start)
-							 )
-		  )
-
+;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;;(add-hook 'robe-mode-hook '(lambda ()
+;;(add-to-list 'company-backends '(company-robe company-dabbrev-code))
+;;(robe-start)
+;;)
+;;)
 
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
@@ -389,13 +399,13 @@
 (setq migemo-options '("-q" "--emacs"))
 (setq migemo-coding-system 'utf-8-unix)
 ;; for Windows
-                                        ;(setq migemo-command "cmigemo")
-                                        ;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
-                                        ;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
-                                        ;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
-                                        ;(setq migemo-options '("-q" "--emacs"))
-                                        ;(setq migemo-coding-system 'cp932-unix)
-                                        ;(setq migemo-coding-system 'utf-8-unix)
+;;(setq migemo-command "cmigemo")
+;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
+;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
+;;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
+;;(setq migemo-options '("-q" "--emacs"))
+;;(setq migemo-coding-system 'cp932-unix)
+;;(setq migemo-coding-system 'utf-8-unix)
 ;; migemo common
 (setq migemo-user-dictionary nil)
 (setq migemo-regex-dictionary nil)
@@ -405,7 +415,7 @@
 ;; helm
 (helm-mode +1)
 ;; ファイル履歴
-(global-set-key [f7] 'helm-recentf)
+;;(global-set-key [f7] 'helm-recentf)
 (global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
 
                                         ;(define-key helm-map (kbd "<tab>") 'helm-next-source)
@@ -495,11 +505,8 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
-  (add-to-list 'company-backends '(company-web-html
-								                   company-css
-								                   company-web-jade
-								                   )
-			         )
+  ;;(add-to-list 'company-backends '(company-web-html company-css company-web-jade company-robe))
+  ;;(setq company-backends '(company-web-html company-css company-web-jade company-robe))
   (company-web-bootstrap+)
   (company-web-fa+)
   )
@@ -509,24 +516,27 @@
 (define-key web-mode-map (kbd "\C-c\C-w") nil)
 
 ;;; ruby-mode
+;;(add-hook 'ruby-mode-hook 'robe-mode)
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;;(eval-after-load 'company
+;;'(push 'company-robe company-backends))
+
 (add-hook 'ruby-mode-hook '(lambda ()
-                             ;;'(highlight-indentation-mode)
-                             (robe-mode)
-							 ;;'(add-to-list 'company-backends '(company-robe))
-							 ;;(setq company-backends '(company-robe))
+                             (modify-syntax-entry ?_ "w") 
+							               ;;(add-to-list 'company-backends '(company-robe company-dabbrev-code))
+                             ;;(setq company-backends '(company-robe company-dabbrev-code))
+							               (robe-mode)
+                             (robe-start)
                              ))
+
+
 
 ;;; rhtml-mode
 (add-hook 'rhtml-mode-hook '(lambda ()
-                              (add-to-list 'company-backends '(company-web-html
-								                               company-css
-								                               company-web-jade
-								                               )
-			                               )
+                              ;;(add-to-list 'company-backends '(company-web-html company-css company-web-jade company-robe ))
                               (company-web-bootstrap+)
                               (company-web-fa+)
-                              )
-          )
+                              ))
 
 ;;; inf-ruby
 (require 'inf-ruby)
@@ -541,9 +551,11 @@
 
 ;;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
-                                   (add-to-list 'company-backends 'company-elisp)
-                                   )
-          )
+                                   (modify-syntax-entry ?- "w") 
+                                   (modify-syntax-entry ?_ "w") 
+                                   ;;(add-to-list 'company-backends '(company-elisp company-dabbrev-code-other-buffers))
+                                   ;;(setq company-backends '(company-elisp company-dabbrev-code-other-buffers))
+                                   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; キーバインド
@@ -607,7 +619,7 @@
 (require 'recentf)
 (setq recentf-max-saved-items 50)            ;; recentf に保存するファイルの数
 (recentf-mode 1)
-;;(global-set-key [f7] 'recentf-open-files)
+(global-set-key [f7] 'recentf-open-files)
 
 ;; コメント
 (global-set-key "\M-]" 'insert-comment-function)
