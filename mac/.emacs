@@ -157,40 +157,6 @@
 (yas-global-mode 1)
 
 
-;;; c-mode, d-mode 共通
-(defun my-c-mode-common-init ()
-  (c-set-style "linux")
-  (setq tab-width 4)
-  (setq c-basic-offset tab-width)
-  ;;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
-  (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
-  (gtags-mode 1)
-  (add-to-list 'ac-sources 'ac-source-gtags)
-  )
-
-(add-hook 'c-mode-hook 'my-c-mode-on-init)
-(add-hook 'c++-mode-hook 'my-c-mode-common-init)
-
-;; d-mode
-(autoload 'd-mode "d-mode"
-  "Major mode for editing D code." t)
-(setq auto-mode-alist (cons '( "\\.d\\'" . d-mode ) auto-mode-alist ))
-;(autoload 'dlint-minor-mode "dlint" nil t)
-;(add-hook 'd-mode-hook (lambda () (dlint-minor-mode 1)))
-
-(add-hook 'd-mode-hook 'my-c-mode-hook)
-
-;; .ino をc-modeで開く
-(setq auto-mode-alist
-      (append '(("\\.ino$" . c++-mode))
-              auto-mode-alist))
-
-;;; yaml-mode
-;;(require 'yaml-mode)
-;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
-
 ;; 色の設定
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -361,7 +327,7 @@
 ;; ;(define-key ac-mode-map (kbd "C-M-?") 'ac-persist-help)
 
 ;; robe
-;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 ;;(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
 ;;(add-hook 'robe-mode-hook 'ac-robe-setup)
 
@@ -412,6 +378,112 @@
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
 
+;;; grep-edit
+;;(require 'grep-edit)
+
+;;; migemo
+(require 'migemo)
+;;;for mac
+(setq migemo-command "/usr/local/bin/cmigemo")
+(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+(setq migemo-options '("-q" "--emacs"))
+(setq migemo-coding-system 'utf-8-unix)
+;; for Windows
+                                        ;(setq migemo-command "cmigemo")
+                                        ;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
+                                        ;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
+                                        ;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
+                                        ;(setq migemo-options '("-q" "--emacs"))
+                                        ;(setq migemo-coding-system 'cp932-unix)
+                                        ;(setq migemo-coding-system 'utf-8-unix)
+;; migemo common
+(setq migemo-user-dictionary nil)
+(setq migemo-regex-dictionary nil)
+(load-library "migemo")
+(migemo-init)
+
+;; helm
+(helm-mode +1)
+;; ファイル履歴
+(global-set-key [f7] 'helm-recentf)
+(global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
+
+                                        ;(define-key helm-map (kbd "<tab>") 'helm-next-source)
+(define-key helm-map (kbd "<tab>") 'dabbrev-expand)
+(define-key helm-map (kbd "<right>") 'helm-select-action)
+                                        ; TABで補完
+(define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+
+;; helm-swoop
+(add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
+(require 'helm-swoop)
+(global-set-key (kbd "C-S-s") 'helm-swoop)
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-swoop-map (kbd "C-a") 'helm-maybe-exit-minibuffer)
+
+;; savehist
+(savehist-mode 1)
+
+;; rinari
+(require 'rinari)
+(global-rinari-mode)
+
+;;; projectile-rails
+;;(require 'projectile)
+;;(projectile-global-mode)
+;;(require 'projectile-rails)
+;;(add-hook 'projectile-mode-hook 'projectile-rails-on)
+;;
+;;(define-key projectile-rails-mode-map (kbd "C-c ; m") 'projectile-rails-find-model)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-find-controller)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; v") 'projectile-rails-find-view)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; f m") 'projectile-rails-find-current-model)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; f c") 'projectile-rails-find-current-controller)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; f v") 'projectile-rails-find-current-view)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; f s") 'projectile-rails-find-current-spec)
+;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-console)
+
+;; eldoc
+;;(add-hook emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; c-mode, d-mode 共通
+(defun my-c-mode-common-init ()
+  (c-set-style "linux")
+  (setq tab-width 4)
+  (setq c-basic-offset tab-width)
+  ;;(c-toggle-auto-hungry-state 1)  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+  (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
+  (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
+  (gtags-mode 1)
+  (add-to-list 'ac-sources 'ac-source-gtags)
+  )
+
+(add-hook 'c-mode-hook 'my-c-mode-on-init)
+(add-hook 'c++-mode-hook 'my-c-mode-common-init)
+
+;; d-mode
+(autoload 'd-mode "d-mode"
+  "Major mode for editing D code." t)
+(setq auto-mode-alist (cons '( "\\.d\\'" . d-mode ) auto-mode-alist ))
+                                        ;(autoload 'dlint-minor-mode "dlint" nil t)
+                                        ;(add-hook 'd-mode-hook (lambda () (dlint-minor-mode 1)))
+
+(add-hook 'd-mode-hook 'my-c-mode-hook)
+
+;; .ino をc-modeで開く
+(setq auto-mode-alist
+      (append '(("\\.ino$" . c++-mode))
+              auto-mode-alist))
+
+;;; yaml-mode
+;;(require 'yaml-mode)
+;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+
 ;;; web-mode
 (require 'ac-html-bootstrap)
 (require 'web-mode)
@@ -424,10 +496,10 @@
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
   (add-to-list 'company-backends '(company-web-html
-								   company-css
-								   company-web-jade
-								   )
-			   )
+								                   company-css
+								                   company-web-jade
+								                   )
+			         )
   (company-web-bootstrap+)
   (company-web-fa+)
   )
@@ -467,78 +539,14 @@
 (eval-after-load "ruby-mode"
   '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
 
-
-;;; grep-edit
-;;(require 'grep-edit)
-
-;;; migemo
-(require 'migemo)
-;;;for mac
-(setq migemo-command "/usr/local/bin/cmigemo")
-(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
-(setq migemo-options '("-q" "--emacs"))
-(setq migemo-coding-system 'utf-8-unix)
-;; for Windows
-;(setq migemo-command "cmigemo")
-;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
-;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
-;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
-;(setq migemo-options '("-q" "--emacs"))
-;(setq migemo-coding-system 'cp932-unix)
-;(setq migemo-coding-system 'utf-8-unix)
-;; migemo common
-(setq migemo-user-dictionary nil)
-(setq migemo-regex-dictionary nil)
-(load-library "migemo")
-(migemo-init)
-
-;; helm
-(helm-mode +1)
-;; ファイル履歴
-(global-set-key [f7] 'helm-recentf)
-(global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
-
-;(define-key helm-map (kbd "<tab>") 'helm-next-source)
-(define-key helm-map (kbd "<tab>") 'dabbrev-expand)
-(define-key helm-map (kbd "<right>") 'helm-select-action)
-; TABで補完
-(define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
-
-;; helm-swoop
-(add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
-(require 'helm-swoop)
-(global-set-key (kbd "C-S-s") 'helm-swoop)
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-(define-key helm-swoop-map (kbd "C-a") 'helm-maybe-exit-minibuffer)
-
-;; savehist
-(savehist-mode 1)
-
-;; rinari
-(require 'rinari)
-(global-rinari-mode)
-
-;;; projectile-rails
-;(require 'projectile)
-;(projectile-global-mode)
-;(require 'projectile-rails)
-;(add-hook 'projectile-mode-hook 'projectile-rails-on)
-;
-;(define-key projectile-rails-mode-map (kbd "C-c ; m") 'projectile-rails-find-model)
-;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-find-controller)
-;(define-key projectile-rails-mode-map (kbd "C-c ; v") 'projectile-rails-find-view)
-;(define-key projectile-rails-mode-map (kbd "C-c ; f m") 'projectile-rails-find-current-model)
-;(define-key projectile-rails-mode-map (kbd "C-c ; f c") 'projectile-rails-find-current-controller)
-;(define-key projectile-rails-mode-map (kbd "C-c ; f v") 'projectile-rails-find-current-view)
-;(define-key projectile-rails-mode-map (kbd "C-c ; f s") 'projectile-rails-find-current-spec)
-;;(define-key projectile-rails-mode-map (kbd "C-c ; c") 'projectile-rails-console)
-
-;; eldoc
-;(add-hook emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+;;; emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook '(lambda ()
+                                   (add-to-list 'company-backends 'company-elisp)
+                                   )
+          )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; キーバインド
+;;;; キーバインド
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 無効化
 (define-key emacs-lisp-mode-map (kbd "C-M-x") nil)
@@ -612,6 +620,9 @@
 (global-set-key [(control ?-)] (lambda () (interactive) (text-scale-decrease 1)))
 ; C-0 でデフォルトに戻す
 (global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))
+
+;; TAGジャンプからもどる
+;;(global-set-key (kbd "M-*") 'pop-tag-mark)
 
 
 ;;;
