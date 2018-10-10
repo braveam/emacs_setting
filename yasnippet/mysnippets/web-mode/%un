@@ -3,5 +3,5 @@
 # key: un
 # --
 <% unless ${1:cond} -%>
-  $2
+ ${2:then}
 <% end -%>
