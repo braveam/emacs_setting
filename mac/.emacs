@@ -385,6 +385,8 @@
 (cc-define-selection-key ":")
 (cc-define-selection-key "=")
 (cc-define-selection-key ">")
+(cc-define-selection-key ";")
+(cc-define-selection-key ",")
 
 ;; help
 (eval-after-load 'company
