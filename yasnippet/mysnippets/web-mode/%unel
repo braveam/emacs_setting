@@ -1,0 +1,8 @@
+# key: %unel
+# name: <% unless ... -%> $. <% else %>
+# --
+<% unless ${0:cond} -%>
+ $1
+<% else -%>
+ $2
+<% end -%>
