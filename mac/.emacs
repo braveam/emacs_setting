@@ -1,6 +1,7 @@
 ;; debug mode
 (setq debug-on-error t)
 
+
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
@@ -335,7 +336,7 @@
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-(setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-web-html company-css company-web-jade company-robe) (company-elisp company-dabbrev-code) company-dabbrev-code (company-gtags company-etags company-keywords) company-dabbrev company-capf))
+(setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-gtags company-etags company-keywords) company-yasnippet company-dabbrev-code company-dabbrev company-capf))
 
 ;;(setq company-dabbrev-other-buffers 'all)
 ;;(setq company-dabbrev-code-everywhere t)
@@ -343,7 +344,7 @@
 ;;(setq company-dabbrev-code-modes t)
 (setq company-dabbrev-ignore-buffers "nil")
 ;;(setq company-transformers '(company-sort-by-occurrence))
-;;(add-hook 'after-init-hook #'company-statistics-mode)
+(add-hook 'after-init-hook #'company-statistics-mode)
 ;;(setq company-require-match nil)
 ;;(setq company-auto-complete #'my-company-visible-and-explicit-action-p)
 ;;(setq company-frontends '(company-echo-metadata-frontend
@@ -380,7 +381,6 @@
 (cc-define-selection-key ":")
 (cc-define-selection-key "=")
 (cc-define-selection-key ">")
-
 
 ;; help
 (eval-after-load 'company
@@ -514,8 +514,7 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
-  ;;(add-to-list 'company-backends '(company-web-html company-css company-web-jade company-robe))
-  ;;(setq company-backends '(company-web-html company-css company-web-jade company-robe))
+  (add-to-list (make-local-variable 'company-backends) '(company-web-html company-css company-web-jade company-robe company-dabbrev-code))
   (company-web-bootstrap+)
   (company-web-fa+)
   )
@@ -531,21 +530,11 @@
 ;;'(push 'company-robe company-backends))
 
 (add-hook 'ruby-mode-hook '(lambda ()
-                             (modify-syntax-entry ?_ "w") 
-							               ;;(add-to-list 'company-backends '(company-robe company-dabbrev-code))
-                             ;;(setq company-backends '(company-robe company-dabbrev-code))
+                             (modify-syntax-entry ?_ "w")
+							               (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
 							               (robe-mode)
                              (robe-start)
                              ))
-
-
-
-;;; rhtml-mode
-(add-hook 'rhtml-mode-hook '(lambda ()
-                              ;;(add-to-list 'company-backends '(company-web-html company-css company-web-jade company-robe ))
-                              (company-web-bootstrap+)
-                              (company-web-fa+)
-                              ))
 
 ;;; inf-ruby
 (require 'inf-ruby)
@@ -561,9 +550,8 @@
 ;;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
                                    (modify-syntax-entry ?- "w") 
-                                   (modify-syntax-entry ?_ "w") 
-                                   ;;(add-to-list 'company-backends '(company-elisp company-dabbrev-code-other-buffers))
-                                   ;;(setq company-backends '(company-elisp company-dabbrev-code-other-buffers))
+                                   (modify-syntax-entry ?_ "w")
+								   (add-to-list (make-local-variable 'company-backends) '(company-elisp company-dabbrev-code-other-buffers))
                                    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
