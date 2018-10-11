@@ -579,7 +579,8 @@
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key "\C-h" nil)
 
-(global-set-key [f2] 'buffer-menu)
+;;(global-set-key [f2] 'buffer-menu)
+(global-set-key [f2] 'helm-buffers-list)
 (global-set-key [f8] 'goto-line)
 (global-set-key [home] 'beginning-of-buffer)
 (global-set-key [end] 'end-of-buffer)
