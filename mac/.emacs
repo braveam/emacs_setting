@@ -1,7 +1,6 @@
 ;; debug mode
 (setq debug-on-error t)
 
-
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
@@ -489,23 +488,26 @@
 
 ;;; flycheck
 (require 'flycheck)
-(autoload 'flycheck-mode "flycheck")
-(add-hook 'ruby-mode-hook 'flycheck-mode)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+;;(autoload 'flycheck-mode "flycheck")
+;;(add-hook 'ruby-mode-hook 'flycheck-mode)
+;; シンタックスチェックをどの場面でかけるか
 (setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
+(setq flycheck-rubylintrc ".ruby-lint.yml")
 
-(flycheck-define-checker ruby-rubocop
-  "A Ruby syntax and style checker using the RuboCop tool. See URL `http://batsov.com/rubocop/'."
-  :command ("rubocop" "--format" "emacs"
-			(config-file "--config" flycheck-rubocoprc)
-			source)
-  :error-patterns
-  ((warning line-start
-			(file-name) ":" line ":" column ": " (or "C" "W") ": " (message)
-			line-end)
-   (error line-start
-		  (file-name) ":" line ":" column ": " (or "E" "F") ": " (message)
-		  line-end))
-  :modes (ruby-mode enh-ruby-mode motion-mode))
+;;(flycheck-define-checker ruby-rubocop
+;;"A Ruby syntax and style checker using the RuboCop tool. See URL `http://batsov.com/rubocop/'."
+;;:command ("rubocop" "--format" "emacs"
+;;(config-file "--config" flycheck-rubocoprc)
+;;source)
+;;:error-patterns
+;;((warning line-start
+;;(file-name) ":" line ":" column ": " (or "C" "W") ": " (message)
+;;line-end)
+;;(error line-start
+;;(file-name) ":" line ":" column ": " (or "E" "F") ": " (message)
+;;line-end))
+;;:modes (ruby-mode enh-ruby-mode motion-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
