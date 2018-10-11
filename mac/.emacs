@@ -96,17 +96,11 @@
     (setq exec-path (append (list dir) exec-path))))
 
 ;;; デフォルトディレクトリ
-(setq default-directory "~/") 
+(setq default-directory "~/")
 (setq command-line-default-directory "~/")
 
 ;; melpaパッケージ
-(require 'package) ;; You might already have this line
-;(add-to-list 'package-archives
-;             '("melpa" . "http://melpa.org/packages/"))
-;(when (< emacs-major-version 24)
-;  ;; For important compatibility libraries like cl-lib
-;  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-;(package-initialize) ;; You might already have this line
+(require 'package)
 (package-initialize)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
