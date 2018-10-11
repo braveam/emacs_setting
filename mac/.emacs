@@ -492,6 +492,7 @@
 (autoload 'flycheck-mode "flycheck")
 (add-hook 'ruby-mode-hook 'flycheck-mode)
 (setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
+
 (flycheck-define-checker ruby-rubocop
   "A Ruby syntax and style checker using the RuboCop tool. See URL `http://batsov.com/rubocop/'."
   :command ("rubocop" "--format" "emacs"

@@ -66,7 +66,7 @@ Style/BracesAroundHashParameters:
 Layout/TrailingWhitespace:
   Enabled: false
 
-# if分の中身が一行の場合は【後置if文】を使用するか、【&& or ||】リテラルを使用し、処理をコントロールして下さい
+# if分の中身が一行の場合は後置if文を使用するか、&& or ||リテラルを使用し、処理をコントロールして下さい
 Style/IfUnlessModifier:
   Enabled: false
 
