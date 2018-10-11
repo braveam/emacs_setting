@@ -84,3 +84,7 @@ Layout/EmptyLinesAroundClassBody:
 # ファイルの末尾に余分な空行がある
 Layout/TrailingBlankLines:
   Enabled: false
+
+# メソッド名のprefixに「set_」「get_」を使用してはいけない
+AccessorMethodName:
+  Enabled: false
