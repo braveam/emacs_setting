@@ -474,6 +474,21 @@
 ;; eldoc
 ;;(add-hook emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
+;;; anzu
+(require 'anzu)
+(global-anzu-mode +1)
+
+;;(set-face-attribute 'anzu-mode-line nil
+;;:foreground "yellow" :weight 'bold)
+(custom-set-variables
+ ;;'(anzu-mode-lighter "")
+ ;;'(anzu-deactivate-region t)
+ '(anzu-search-threshold 1000)
+ ;;'(anzu-use-mimego t)
+ ;;'(anzu-replace-to-string-separator " => ")
+ )
+(global-set-key (kbd "C-%") 'anzu-query-replace-at-cursor)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -654,7 +669,7 @@
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+    (anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
