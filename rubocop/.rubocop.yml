@@ -1,0 +1,83 @@
+# disable to check whether method name use camel case.
+#MethodName:
+#  Enabled: false
+
+# disable to check whether symbol name use camel case.
+#SymbolName:
+#  Enabled: false
+
+# 日本語のコメントを許可する
+Style/AsciiComments:
+  Enabled: false
+
+# disable to check whether lines is less than 80 characters.
+#LineLength:
+#  Enabled: false
+  
+Style/Encoding:
+  Enabled: false
+
+Style/VariableInterpolation:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/UnlessElse:
+  Enabled: false
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Layout/SpaceInsideParens:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Naming/VariableName:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: false
+
+# 正規表現の$1, $2はRegexp.last_match[n]を推奨
+Style/PerlBackrefs:
+  Enabled: false
+
+# 空行
+Layout/EmptyLines:
+  Enabled: false
+
+# メソッドパラメータにハッシュ{ ... }がついてて余計
+Style/BracesAroundHashParameters:
+  Enabled: false
+
+# 不要なホワイトスペース
+Layout/TrailingWhitespace:
+  Enabled: false
+
+# if分の中身が一行の場合は【後置if文】を使用するか、【&& or ||】リテラルを使用し、処理をコントロールして下さい
+Style/IfUnlessModifier:
+  Enabled: false
+
+# 最後の評価だからreturn外してfalseにしても同じ挙動する
+Style/RedundantReturn:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
+
+# class endの前に無駄な改行
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+

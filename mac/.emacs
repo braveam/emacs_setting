@@ -480,14 +480,31 @@
 
 ;;(set-face-attribute 'anzu-mode-line nil
 ;;:foreground "yellow" :weight 'bold)
-(custom-set-variables
- ;;'(anzu-mode-lighter "")
- ;;'(anzu-deactivate-region t)
- '(anzu-search-threshold 1000)
- ;;'(anzu-use-mimego t)
- ;;'(anzu-replace-to-string-separator " => ")
- )
+
 (global-set-key (kbd "C-%") 'anzu-query-replace-at-cursor)
+
+;;; rubocop
+(require 'rubocop)
+(add-hook 'ruby-mode-hook 'rubocop-mode)
+
+;;; flycheck
+(require 'flycheck)
+(autoload 'flycheck-mode "flycheck")
+(add-hook 'ruby-mode-hook 'flycheck-mode)
+(setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
+(flycheck-define-checker ruby-rubocop
+  "A Ruby syntax and style checker using the RuboCop tool. See URL `http://batsov.com/rubocop/'."
+  :command ("rubocop" "--format" "emacs"
+			(config-file "--config" flycheck-rubocoprc)
+			source)
+  :error-patterns
+  ((warning line-start
+			(file-name) ":" line ":" column ": " (or "C" "W") ": " (message)
+			line-end)
+   (error line-start
+		  (file-name) ":" line ":" column ": " (or "E" "F") ": " (message)
+		  line-end))
+  :modes (ruby-mode enh-ruby-mode motion-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
@@ -554,9 +571,9 @@
 
 (add-hook 'ruby-mode-hook '(lambda ()
                              (modify-syntax-entry ?_ "w")
-							               (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
-							               (robe-mode)
-                             (robe-start)
+							 (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
+							 (robe-mode)
+							 ;;(robe-start)
                              ))
 
 ;;; inf-ruby
@@ -666,10 +683,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(anzu-search-threshold 1000)
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
