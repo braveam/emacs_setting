@@ -81,3 +81,6 @@ Style/CommentedKeyword:
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
+# ファイルの末尾に余分な空行がある
+Layout/TrailingBlankLines:
+  Enabled: false
