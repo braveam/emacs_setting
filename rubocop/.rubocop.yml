@@ -1,19 +1,7 @@
-# disable to check whether method name use camel case.
-#MethodName:
-#  Enabled: false
-
-# disable to check whether symbol name use camel case.
-#SymbolName:
-#  Enabled: false
-
 # 日本語のコメントを許可する
 Style/AsciiComments:
   Enabled: false
 
-# disable to check whether lines is less than 80 characters.
-#LineLength:
-#  Enabled: false
-  
 Style/Encoding:
   Enabled: false
 
@@ -94,4 +82,16 @@ Layout/LeadingCommentSpace:
 
 # ブロックの本体の周りの空白行が設定と一致するか
 Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+# ブロック内行数を25行以内におさめる
+Metrics/BlockLength:
+  Enabled: false
+
+# デフォルトパラメータの=まわりにスペースがある
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+# 余分なスペース
+Layout/ExtraSpacing:
   Enabled: false
