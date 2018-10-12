@@ -91,3 +91,7 @@ AccessorMethodName:
 
 Layout/LeadingCommentSpace:
   Enabled: false
+
+# ブロックの本体の周りの空白行が設定と一致するか
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
