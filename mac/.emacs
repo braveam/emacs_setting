@@ -335,6 +335,7 @@
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 (setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-gtags company-etags company-keywords) company-yasnippet company-dabbrev-code company-dabbrev company-capf))
 
+(setq company-dabbrev-downcase nil)
 ;;(setq company-dabbrev-other-buffers 'all)
 ;;(setq company-dabbrev-code-everywhere t)
 (setq company-dabbrev-code-other-buffers (quote all)) ; 全バッファから補完
