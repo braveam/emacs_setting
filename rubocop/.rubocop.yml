@@ -88,3 +88,6 @@ Layout/TrailingBlankLines:
 # メソッド名のprefixに「set_」「get_」を使用してはいけない
 AccessorMethodName:
   Enabled: false
+
+Layout/LeadingCommentSpace:
+  Enabled: false
