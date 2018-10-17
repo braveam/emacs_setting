@@ -100,4 +100,5 @@ Layout/ExtraSpacing:
 Metrics/ClassLength:
   Enabled: false
 
-  
+Metrics/MethodLength:
+  Enabled: false
