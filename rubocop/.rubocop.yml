@@ -95,3 +95,9 @@ Layout/SpaceAroundEqualsInParameterDefault:
 # 余分なスペース
 Layout/ExtraSpacing:
   Enabled: false
+
+### rails ###
+Metrics/ClassLength:
+  Enabled: false
+
+  
