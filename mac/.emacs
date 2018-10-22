@@ -489,7 +489,36 @@
 ;; シンタックスチェックをどの場面でかけるか
 (setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
 ;;(setq flycheck-rubylintrc ".ruby-lint.yml")
-(setq flycheck-rubylintrc "~/Documents/WebProject/nazottaa/ruby-lint.yml")
+
+;; ruby-lin.ymlのあるフォルダ検索
+(defun find-ruby-lint-yml ()
+  (and buffer-file-name
+	   (locate-dominating-file buffer-file-name "ruby-lint.yml")
+	   )
+  )
+
+(add-hook 'rinari-minor-mode-hook '(lambda ()
+									 (setq flycheck-rubylintrc (find-ruby-lint-yml))
+									 (flycheck-define-checker ruby-rubylint
+									   "A Ruby syntax and code analysis checker using ruby-lint.
+
+Requires ruby-lint 2.0.2 or newer.  See URL
+`https://github.com/YorickPeterse/ruby-lint'."
+									   :command ("ruby-lint" "--presenter=syntastic"
+												 (config-file "--config" flycheck-rubylintrc)
+												 source)
+									   ;; Ruby Lint can't read from standard input
+									   :error-patterns
+									   ((info line-start
+											  (file-name) ":I:" line ":" column ": " (message) line-end)
+										(warning line-start
+												 (file-name) ":W:" line ":" column ": " (message) line-end)
+										(error line-start
+											   (file-name) ":E:" line ":" column ": " (message) line-end))
+									   :modes (enh-ruby-mode ruby-mode)
+									   :working-directory flycheck-ruby--find-project-root
+									   )
+									 ))
 
 ;;(flycheck-define-checker ruby-rubocop
 ;;"A Ruby syntax and style checker using the RuboCop tool. See URL `http://batsov.com/rubocop/'."
@@ -505,25 +534,6 @@
 ;;line-end))
 ;;:modes (ruby-mode enh-ruby-mode motion-mode))
 
-(flycheck-define-checker ruby-rubylint
-  "A Ruby syntax and code analysis checker using ruby-lint.
-
-Requires ruby-lint 2.0.2 or newer.  See URL
-`https://github.com/YorickPeterse/ruby-lint'."
-  :command ("ruby-lint" "--presenter=syntastic"
-            (config-file "--config" flycheck-rubylintrc)
-            source)
-  ;; Ruby Lint can't read from standard input
-  :error-patterns
-  ((info line-start
-         (file-name) ":I:" line ":" column ": " (message) line-end)
-   (warning line-start
-            (file-name) ":W:" line ":" column ": " (message) line-end)
-   (error line-start
-          (file-name) ":E:" line ":" column ": " (message) line-end))
-  :modes (enh-ruby-mode ruby-mode)
-  :working-directory flycheck-ruby--find-project-root
-  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
