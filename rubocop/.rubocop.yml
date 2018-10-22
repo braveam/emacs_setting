@@ -108,3 +108,15 @@ Metrics/AbcSize:
 
 Style/HashSyntax:
   Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Layout/CommentIndentation:
+  Enabled: false
