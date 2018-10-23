@@ -586,6 +586,9 @@ Requires ruby-lint 2.0.2 or newer.  See URL
   (add-to-list (make-local-variable 'company-backends) '(company-web-html company-css company-web-jade company-robe company-dabbrev-code))
   (company-web-bootstrap+)
   (company-web-fa+)
+  (modify-syntax-entry ?_ "w")
+  (modify-syntax-entry ?- "w")
+  (modify-syntax-entry ?@ "w")
   )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
@@ -600,9 +603,10 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 
 (add-hook 'ruby-mode-hook '(lambda ()
                              (modify-syntax-entry ?_ "w")
-							 (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
-							 (robe-mode)
-							 ;;(robe-start)
+                             (modify-syntax-entry ?@ "w")
+							               (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
+							               (robe-mode)
+							               ;;(robe-start)
                              ))
 
 ;;; inf-ruby
