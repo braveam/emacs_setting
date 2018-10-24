@@ -127,3 +127,9 @@ Style/TrailingCommaInArrayLiteral:
 
 Layout/MultilineArrayBraceLayout:
   Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
