@@ -133,3 +133,12 @@ Style/WordArray:
 
 Style/GuardClause:
   Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
