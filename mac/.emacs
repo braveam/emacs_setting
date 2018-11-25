@@ -423,7 +423,7 @@
 (load-library "migemo")
 (migemo-init)
 
-;; helm
+;;; helm
 (helm-mode +1)
 ;; ファイル履歴
 ;;(global-set-key [f7] 'helm-recentf)
