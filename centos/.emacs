@@ -72,8 +72,8 @@
     (setq exec-path (append (list dir) exec-path))))
 
 ;;; デフォルトディレクトリ
-(setq default-directory "~/")
-(setq command-line-default-directory "~/")
+;;(setq default-directory "~/")
+;;(setq command-line-default-directory "~/")
 
 ;; melpaパッケージ
 (require 'package)
@@ -109,13 +109,13 @@
   '(set-face-background 'web-mode-current-element-highlight-face "blue"))
 
 ;; ファイルとモードの関連付け
-(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css$"       . web-mode))
-(add-to-list 'auto-mode-alist '("\\.scss$"      . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js$"        . web-mode))
-(add-to-list 'auto-mode-alist '("\\.coffee$"    . web-mode))
-(add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
+;;(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.css$"       . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.scss$"      . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.js$"        . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.coffee$"    . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
 
 ;; 長い行の折り返しを t:しない nil:する
 (setq-default truncate-lines t)
@@ -245,8 +245,8 @@
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key "\C-h" nil)
 
-;;(global-set-key [f2] 'buffer-menu)
-(global-set-key [f2] 'helm-buffers-list)
+(global-set-key [f2] 'buffer-menu)
+;;(global-set-key [f2] 'helm-buffers-list)
 (global-set-key [f8] 'goto-line)
 (global-set-key [home] 'beginning-of-buffer)
 (global-set-key [end] 'end-of-buffer)
