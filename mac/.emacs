@@ -16,6 +16,8 @@
 (modify-coding-system-alist 'file "\\.\\(scala\\|sbt\\)\\'" 'utf-8) ;; Scala
 (modify-coding-system-alist 'file "\\.[eh]rl\\'" 'utf-8)            ;; Erlang
 (modify-coding-system-alist 'file "\\.exs?\\'" 'utf-8)              ;; Elixir
+(modify-coding-system-alist 'file "\\.yml\\'" 'utf-8)               ;; Yaml
+(modify-coding-system-alist 'file "\\.yaml\\'" 'utf-8)              ;; Yaml
 
 ;; IME
 ;;(setq default-input-method "W32-IME")
@@ -191,6 +193,8 @@
 (add-to-list 'auto-mode-alist '("\\.js$"        . web-mode))
 (add-to-list 'auto-mode-alist '("\\.coffee$"    . web-mode))
 (add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$"       . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$"      . yaml-mode))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -333,12 +337,12 @@
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-(setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake company-files (company-gtags company-etags company-keywords) company-yasnippet company-dabbrev-code company-dabbrev company-capf))
+(setq-default company-backends '(company-bbdb company-eclim company-semantic company-clang company-xcode company-cmake (company-gtags company-etags company-keywords) company-yasnippet company-dabbrev-code company-dabbrev company-capf company-files))
 
 (setq company-dabbrev-downcase nil)
-;;(setq company-dabbrev-other-buffers 'all)
+(setq company-dabbrev-other-buffers 'all) ; 全バッファから補完 company-dabbrev用
 ;;(setq company-dabbrev-code-everywhere t)
-(setq company-dabbrev-code-other-buffers (quote all)) ; 全バッファから補完
+(setq company-dabbrev-code-other-buffers 'all) ; 全バッファから補完 company-dabbrev-code用
 ;;(setq company-dabbrev-code-modes t)
 (setq company-dabbrev-ignore-buffers "nil")
 ;;(setq company-transformers '(company-sort-by-occurrence))
@@ -568,9 +572,14 @@ Requires ruby-lint 2.0.2 or newer.  See URL
               auto-mode-alist))
 
 ;;; yaml-mode
-;;(require 'yaml-mode)
+(require 'yaml-mode)
 ;;(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 ;;(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+(add-hook 'yaml-mode-hook '(lambda ()
+                             (modify-syntax-entry ?_ "w")
+                             (modify-syntax-entry ?@ "w")
+							 (setq-local company-backends '(company-dabbrev company-capf company-files))
+							 ))
 
 ;;; web-mode
 (require 'ac-html-bootstrap)
