@@ -392,14 +392,6 @@
 (eval-after-load 'company
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
-;; company for robe
-;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-;;(add-hook 'robe-mode-hook '(lambda ()
-;;(add-to-list 'company-backends '(company-robe company-dabbrev-code))
-;;(robe-start)
-;;)
-;;)
-
 ;; company quickhelp
 (company-quickhelp-mode) ; Quick Help
 
@@ -592,7 +584,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
-  (add-to-list (make-local-variable 'company-backends) '(company-web-html company-css company-web-jade company-robe company-dabbrev-code))
+  (setq-local company-backends '(company-web-html company-css company-web-jade company-robe company-dabbrev-code company-dabbrev company-capf company-files))
   (company-web-bootstrap+)
   (company-web-fa+)
   (modify-syntax-entry ?_ "w")
@@ -607,16 +599,14 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 ;;; ruby-mode
 ;;(add-hook 'ruby-mode-hook 'robe-mode)
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-;;(eval-after-load 'company
-;;'(push 'company-robe company-backends))
 
 (add-hook 'ruby-mode-hook '(lambda ()
                              (modify-syntax-entry ?_ "w")
                              (modify-syntax-entry ?@ "w")
-							               (add-to-list (make-local-variable 'company-backends) '(company-robe company-dabbrev-code))
-							               (robe-mode)
-							               ;;(robe-start)
-                             ))
+							 (setq-local company-backends '(company-robe company-dabbrev-code company-dabbrev company-capf company-files))
+							 (robe-mode)
+							 ;;(robe-start)
+							 ))
 
 ;;; inf-ruby
 (require 'inf-ruby)
@@ -633,8 +623,8 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
                                    (modify-syntax-entry ?- "w") 
                                    (modify-syntax-entry ?_ "w")
-								   (add-to-list (make-local-variable 'company-backends) '(company-elisp company-dabbrev-code-other-buffers))
-                                   ))
+								   (setq-local company-backends '(company-elisp company-dabbrev-code company-dabbrev company-capf company-files))
+								   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; キーバインド
