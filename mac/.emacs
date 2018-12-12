@@ -425,11 +425,12 @@
 ;;(global-set-key [f7] 'helm-recentf)
 (global-set-key (kbd "C-M-x C-M-f") 'helm-recentf)
 
-                                        ;(define-key helm-map (kbd "<tab>") 'helm-next-source)
+;;(define-key helm-map (kbd "<tab>") 'helm-next-source)
 (define-key helm-map (kbd "<tab>") 'dabbrev-expand)
 (define-key helm-map (kbd "<right>") 'helm-select-action)
-                                        ; TABで補完
+;; TABで補完
 (define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-find-files-map (kbd "<tab>") 'helm-execute-persistent-action)
 
 ;; helm-swoop
 (add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
@@ -439,8 +440,16 @@
 (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
 (define-key helm-swoop-map (kbd "C-a") 'helm-maybe-exit-minibuffer)
 
-;; savehist
+;; helm-dired-history
+(require 'savehist)
+(add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
 (savehist-mode 1)
+
+(with-eval-after-load 'dired
+  (require 'helm-dired-history) 
+  ;; if you are using ido,you'd better disable ido for dired
+  ;; (define-key (cdr ido-minor-mode-map-entry) [remap dired] nil) ;in ido-setup-hook
+  (define-key dired-mode-map "," 'dired))
 
 ;; rinari
 (require 'rinari)
@@ -719,7 +728,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
