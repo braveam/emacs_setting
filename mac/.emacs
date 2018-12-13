@@ -543,6 +543,19 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; conf-mode
+(require 'generic-x)
+(add-hook 'conf-mode-hook '(lambda ()
+							 (modify-syntax-entry ?_ "w")
+							 (modify-syntax-entry ?@ "w")
+							 (setq-local company-backends '(company-dabbrev company-capf company-files))
+							 (setq tab-width 4)
+							 (setq default-tab-width 4)
+							 (setq indent-tabs-mode nil) ;; タブの無効化
+							 (global-set-key (kbd "<tab>") 'tab-to-tab-stop)
+							 ))
+
 ;;; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
   (c-set-style "linux")
