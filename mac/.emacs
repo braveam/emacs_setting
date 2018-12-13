@@ -553,8 +553,12 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 							 (setq tab-width 4)
 							 (setq default-tab-width 4)
 							 (setq indent-tabs-mode nil) ;; タブの無効化
-							 (global-set-key (kbd "<tab>") 'tab-to-tab-stop)
+							 (local-set-key (kbd "<tab>") 'tab-to-tab-stop)
 							 ))
+
+(add-hook 'sh-mode-hook '(lambda ()
+						   (local-unset-key "\C-\M-x")
+						   ))
 
 ;;; c-mode, d-mode 共通
 (defun my-c-mode-common-init ()
