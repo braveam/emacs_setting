@@ -430,7 +430,7 @@
 (define-key helm-map (kbd "<right>") 'helm-select-action)
 ;; TABで補完
 (define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-find-files-map (kbd "<tab>") 'helm-execute-persistent-action)
+;;(define-key helm-find-files-map (kbd "<tab>") 'helm-execute-persistent-action)
 
 ;; helm-swoop
 (add-to-list 'load-path "~/.emacs.d/elisp/helm-swoop")
