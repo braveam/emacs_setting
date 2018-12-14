@@ -269,6 +269,19 @@
 (kill-new (current-word)))
 (global-set-key "\C-c\C-w" 'kill-ring-save-current-word)
 
+;; Macのクリップボードと同期
+(defun copy-from-osx ()
+  (shell-command-to-string "pbpaste"))
+
+(defun paste-to-osx (text &optional push)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
+
+(setq interprogram-cut-function 'paste-to-osx)
+(setq interprogram-paste-function 'copy-from-osx)
+
 ;; カスタマイズコンパイル
 (defun yrecompile()
   (interactive)
@@ -285,7 +298,13 @@
       (end-of-buffer-other-window "*compilation*")
       )
     )
-)
+  )
+
+;;; ediff
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
 
 ;; コメント
 ;; 複数業コメント
