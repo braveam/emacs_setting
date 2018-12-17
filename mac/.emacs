@@ -18,6 +18,7 @@
 (modify-coding-system-alist 'file "\\.exs?\\'" 'utf-8)              ;; Elixir
 (modify-coding-system-alist 'file "\\.yml\\'" 'utf-8)               ;; Yaml
 (modify-coding-system-alist 'file "\\.yaml\\'" 'utf-8)              ;; Yaml
+(modify-coding-system-alist 'file "\\.j2\\'" 'utf-8)
 
 ;; IME
 ;;(setq default-input-method "W32-IME")
@@ -195,6 +196,7 @@
 (add-to-list 'auto-mode-alist '("\\.rb$"        . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$"       . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$"      . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.j2$"        . conf-mode))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -568,6 +570,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 (add-hook 'conf-mode-hook '(lambda ()
 							 (modify-syntax-entry ?_ "w")
 							 (modify-syntax-entry ?@ "w")
+							 (modify-syntax-entry ?- "w")
 							 (setq-local company-backends '(company-dabbrev company-capf company-files))
 							 (setq tab-width 4)
 							 (setq default-tab-width 4)
@@ -615,6 +618,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 (add-hook 'yaml-mode-hook '(lambda ()
                              (modify-syntax-entry ?_ "w")
                              (modify-syntax-entry ?@ "w")
+							 (modify-syntax-entry ?- "w")
 							 (setq-local company-backends '(company-dabbrev company-capf company-files))
 							 ))
 
