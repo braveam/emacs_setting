@@ -1,3 +1,4 @@
+;;test
 ;; debug mode
 (setq debug-on-error t)
 
