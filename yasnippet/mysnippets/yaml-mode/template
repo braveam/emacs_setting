@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: template
+# key: template
+# --
+- name: $1
+  template:
+    src: ${2:src.j2}
+    dest: $3
+    owner: ${4:root}
+    group: ${5:root}
+    mode: ${6:0644}

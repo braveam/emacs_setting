@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: yum
+# key: yum
+# --
+- name: install yum packages
+  yum:
+    state: ${2:present}
+    enablerepo: ${3:epel}
+    name:
+      - $1
