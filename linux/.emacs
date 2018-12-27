@@ -56,7 +56,7 @@
               default-frame-alist))
 
 ;;;; ロードパス
-(add-to-list 'load-path "~/emacs/lisp/")
+(add-to-list 'load-path "~/emacs_setting/lisp/")
 ;; PATH
 (dolist (dir (list
 	            "/sbin"
@@ -171,6 +171,12 @@
     )
 )
 
+;;; ediff
+;; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; diffのバッファを上下ではなく左右に並べる
+(setq ediff-split-window-function 'split-window-horizontally)
+
 ;; コメント
 ;; 複数業コメント
 (defun insert-comment-function ()
@@ -188,7 +194,9 @@
 ;; savehist
 (savehist-mode 1)
 
-
+;; Git関連
+(require 'magit)
+(define-key global-map (kbd "C-x g") 'magit-status)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; mode
@@ -309,3 +317,9 @@
 ;;;
 ;;; end of file
 ;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (magit))))
