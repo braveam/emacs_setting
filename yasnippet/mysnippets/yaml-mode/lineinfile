@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: lineinfile
+# key: lineinfile
+# --
+- name: $1
+  lineinfile:
+    dest: $2
+    regexp: ${3:'^'}
+    line: ${4:''}

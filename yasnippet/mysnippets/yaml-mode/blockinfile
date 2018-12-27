@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: blockinfile
+# key: blockinfile
+# --
+- name: $2
+  blockinfile:
+    dest: $3
+    insertafter: ${4:EOF}
+    content: |
+      $1

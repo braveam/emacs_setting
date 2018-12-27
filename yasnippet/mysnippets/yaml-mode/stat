@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: stat
+# key: stat
+# --
+- name: ${1:check}
+  stat:
+    path: $2
+  register: ${3:_stat}
+
+  when: $3.stat.exists == false

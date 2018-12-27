@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: original
+# key: original
+# --
+- name: オリジナルファイルをバックアップ
+  shell: "cp -n {{ item }} {{ item }}.original"
+  with_items:
+    - $1

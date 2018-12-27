@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: chmod
+# key: chmod
+# --
+- name: モード変更
+  file:
+    path: $1
+    state: ${4:file}
+    mode: ${2:0644}
+    owner: ${3:root}
+    group: $3

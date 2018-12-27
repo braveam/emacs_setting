@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: shell
+# key: shell
+# --
+- name: $1
+  shell: $2
