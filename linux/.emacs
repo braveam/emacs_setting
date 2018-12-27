@@ -302,8 +302,9 @@
 (global-set-key [f7] 'recentf-open-files)
 
 ;; コメント
-(global-set-key "\M-]" 'insert-comment-function)
-(global-set-key "\M-[" 'insert-line-comment-function)
+(global-set-key (kbd "M-]") 'insert-comment-function)
+;;(global-set-key (kbd "M-[") 'insert-line-comment-function) ;; これを定義するとターミナルからCMD-V,ファンクションキーがきかなくなる
+
 
 ;; フォントサイズ変更キー
 ; C-+ で拡大
