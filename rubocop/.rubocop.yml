@@ -143,5 +143,6 @@ Naming/PredicateName:
 Bundler/OrderedGems:
   Enabled: false
 
+# _による桁区切り
 Style/NumericLiterals:
   Enabled: false
