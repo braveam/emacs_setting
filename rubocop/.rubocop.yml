@@ -142,3 +142,6 @@ Naming/PredicateName:
 
 Bundler/OrderedGems:
   Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
