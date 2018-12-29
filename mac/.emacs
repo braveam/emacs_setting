@@ -20,6 +20,9 @@
 (modify-coding-system-alist 'file "\\.yaml\\'" 'utf-8)              ;; Yaml
 (modify-coding-system-alist 'file "\\.j2\\'" 'utf-8)
 
+;; coding: utf-8を挿入しない
+(setq ruby-insert-encoding-magic-comment nil)
+
 ;; IME
 ;;(setq default-input-method "W32-IME")
 ;;(setq-default w32-ime-mode-line-state-indicator "[--]")
