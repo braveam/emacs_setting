@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: git
+# key: git
+# --
+- name: git clone $1
+  git:
+    repo: ${2:https://}
+    dest: $3

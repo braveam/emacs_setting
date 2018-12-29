@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: geturl
+# key: geturl
+# --
+- name: check archive
+  stat:
+    path: $2
+  register: ${3:archive_stat}
+
+- name: download 
+  get_url:
+    url: ${1:https://}
+    dest: $2
+  when: $3.stat.exists == false

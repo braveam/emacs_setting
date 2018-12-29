@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: link
+# key: link
+# --
+- name: link
+  file:
+    src: $1
+    dest: $2
+    state: link

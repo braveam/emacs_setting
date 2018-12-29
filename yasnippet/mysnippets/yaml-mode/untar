@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: untar
+# key: untar
+# --
+- name: check untar
+  stat:
+    path: $2
+  register: untar_stat
+
+- name: untar
+  command: "tar -xzf $1 -C $2 --strip-components=1"
+  when: untar_stat.stat.exists == false
