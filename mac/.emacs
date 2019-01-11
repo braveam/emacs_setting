@@ -19,6 +19,7 @@
 (modify-coding-system-alist 'file "\\.yml\\'" 'utf-8)               ;; Yaml
 (modify-coding-system-alist 'file "\\.yaml\\'" 'utf-8)              ;; Yaml
 (modify-coding-system-alist 'file "\\.j2\\'" 'utf-8)
+(modify-coding-system-alist 'file "\\.cs\\'" 'utf-8)
 
 ;; coding: utf-8を挿入しない
 (setq ruby-insert-encoding-magic-comment nil)
@@ -200,6 +201,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$"       . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$"      . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.j2$"        . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.cs$"        . c++-mode))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -598,7 +600,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)  ;; RET キーで自動改行+インデント
   (local-unset-key "\C-c\C-w") ; subword-mode切り替えを無効化
   (gtags-mode 1)
-  (add-to-list 'ac-sources 'ac-source-gtags)
+  (setq-local company-backends '(company-dabbrev-code company-dabbrev company-capf company-files))
   )
 
 (add-hook 'c-mode-hook 'my-c-mode-on-init)
