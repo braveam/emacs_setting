@@ -325,6 +325,10 @@
   (insert "///< @todo ")
   )
 
+;; Git関連
+(require 'magit)
+(define-key global-map (kbd "C-x g") 'magit-status)
+
 ;; ;; auto-complete
 ;; (require 'auto-complete-config)
 ;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20170125.245/dict")
@@ -771,7 +775,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(magit helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
