@@ -4,6 +4,10 @@
 ;;; 日本語環境設定
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8) ;; デフォルト
+;;(set-default 'buffer-file-coding-system 'utf-8) ;; 新規作成時デフォルト
+;; set-selection-coding-system は set-clipboard-coding-systemと同じ
+;;(set-clipboard-coding-system 'sjis)
+
 (modify-coding-system-alist 'file "\\.rb\\'" 'utf-8)                ;; Ruby
 (modify-coding-system-alist 'file "\\.erb\\'" 'utf-8)               ;; html.erb
 (modify-coding-system-alist 'file "\\.html?\\'" 'utf-8)             ;; html, htm
@@ -20,6 +24,7 @@
 (modify-coding-system-alist 'file "\\.yaml\\'" 'utf-8)              ;; Yaml
 (modify-coding-system-alist 'file "\\.j2\\'" 'utf-8)
 (modify-coding-system-alist 'file "\\.cs\\'" 'utf-8)
+(modify-coding-system-alist 'file "\\.py\\'" 'utf-8)                ;; Python
 
 ;; coding: utf-8を挿入しない
 (setq ruby-insert-encoding-magic-comment nil)
@@ -116,15 +121,15 @@
 
 
 ;;; インデントハイライト
-;(add-to-list 'load-path "~/emacs/lisp/Highlight-Indentation-for-Emacs")
-;(require 'highlight-indentation)
-;(setq highlight-indentation-offset 2)
-;;(set-face-background 'highlight-indentation-face "ivory1")
-;(set-face-background 'highlight-indentation-face "LightYellow1")
-;(set-face-background 'highlight-indentation-current-column-face "AntiqueWhite1")
-;
+;;(add-to-list 'load-path "~/emacs/lisp/Highlight-Indentation-for-Emacs")
+;;(require 'highlight-indentation)
+;;(setq highlight-indentation-offset 2)
+;;;;(set-face-background 'highlight-indentation-face "ivory1")
+;;(set-face-background 'highlight-indentation-face "LightYellow1")
+;;(set-face-background 'highlight-indentation-current-column-face "AntiqueWhite1")
+;;
 ;; highlight-indentation-mode が呼ばれたら highlight-indentation-current-column-mode も実行する
-;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
+;;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
 
 ;; ruby環境設定
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/rbenv-20141120.749/rbenv.el"))
@@ -202,6 +207,7 @@
 (add-to-list 'auto-mode-alist '("\\.yaml$"      . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.j2$"        . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.cs$"        . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.py$"        . python-mode))
 
 ;; ;;; 印刷の設定
 ;; ;; この設定で M-x print-buffer RET などでの印刷ができるようになります
@@ -271,23 +277,10 @@
 
 ;; ワードコピー
 (defun kill-ring-save-current-word ()
-"Save current word to kill ring as if killed, but don't kill it."
-(interactive)
-(kill-new (current-word)))
+  "Save current word to kill ring as if killed, but don't kill it."
+  (interactive)
+  (kill-new (current-word)))
 (global-set-key "\C-c\C-w" 'kill-ring-save-current-word)
-
-;; Macのクリップボードと同期
-(defun copy-from-osx ()
-  (shell-command-to-string "pbpaste"))
-
-(defun paste-to-osx (text &optional push)
-  (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc))))
-
-(setq interprogram-cut-function 'paste-to-osx)
-(setq interprogram-paste-function 'copy-from-osx)
 
 ;; カスタマイズコンパイル
 (defun yrecompile()
@@ -753,12 +746,12 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 (global-set-key "\M-]" 'insert-comment-function)
 (global-set-key "\M-[" 'insert-line-comment-function)
 
-;; フォントサイズ変更キー
-; C-+ で拡大
+;;; フォントサイズ変更キー
+;; C-+ で拡大
 (global-set-key [(control ?\;)] (lambda () (interactive) (text-scale-increase 1)))
-; C-- で縮小
+;; C-- で縮小
 (global-set-key [(control ?-)] (lambda () (interactive) (text-scale-decrease 1)))
-; C-0 でデフォルトに戻す
+;; C-0 でデフォルトに戻す
 (global-set-key [(control ?0)] (lambda () (interactive) (text-scale-increase 0)))
 
 ;; TAGジャンプからもどる
@@ -777,7 +770,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-	(magit helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+	(python-mode magit helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
