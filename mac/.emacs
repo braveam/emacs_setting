@@ -92,7 +92,7 @@
               default-frame-alist))
 
 ;;;; ロードパス
-(add-to-list 'load-path "~/emacs/lisp/")
+(add-to-list 'load-path "~/emacs_setting/lisp/")
 ;; PATH
 (dolist (dir (list
 	            "/sbin"
@@ -132,10 +132,10 @@
 ;;(add-hook 'highlight-indentation-mode-hook 'highlight-indentation-current-column-mode)
 
 ;; ruby環境設定
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/rbenv-20141120.749/rbenv.el"))
-(require 'rbenv)
-(global-rbenv-mode)
-(setq rbenv-installation-dir "~/.rbenv")
+;(add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa/rbenv-20141120.749/rbenv.el"))
+;(require 'rbenv)
+;(global-rbenv-mode)
+;(setq rbenv-installation-dir "~/.rbenv")
 
 ;;; minibuffer
 (define-key minibuffer-local-map (kbd "C-p") 'previous-line-or-history-element)
@@ -148,8 +148,8 @@
 ;; 自分用・追加用テンプレート -> mysnippetに作成したテンプレートが格納される
 (require 'yasnippet)
 (setq yas-snippet-dirs
-      '("~/emacs/yasnippet/mysnippets"
-        "~/emacs/yasnippet/snippets"
+      '("~/emacs_setting/yasnippet/mysnippets"
+        "~/emacs_setting/yasnippet/snippets"
         ))
 ;; 既存スニペットを挿入する
 (define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
@@ -321,8 +321,8 @@
   )
 
 ;; Git関連
-(require 'magit)
-(define-key global-map (kbd "C-x g") 'magit-status)
+;;(require 'magit)
+;;(define-key global-map (kbd "C-x g") 'magit-status)
 
 ;; ;; auto-complete
 ;; (require 'auto-complete-config)
@@ -422,25 +422,25 @@
 ;;(require 'grep-edit)
 
 ;;; migemo
-(require 'migemo)
-;;;for mac
-(setq migemo-command "/usr/local/bin/cmigemo")
-(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
-(setq migemo-options '("-q" "--emacs"))
-(setq migemo-coding-system 'utf-8-unix)
-;; for Windows
-;;(setq migemo-command "cmigemo")
-;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
-;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
-;;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
+;;(require 'migemo)
+;;;;;for mac
+;;(setq migemo-command "/usr/local/bin/cmigemo")
+;;(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
 ;;(setq migemo-options '("-q" "--emacs"))
-;;(setq migemo-coding-system 'cp932-unix)
 ;;(setq migemo-coding-system 'utf-8-unix)
-;; migemo common
-(setq migemo-user-dictionary nil)
-(setq migemo-regex-dictionary nil)
-(load-library "migemo")
-(migemo-init)
+;;;; for Windows
+;;;;(setq migemo-command "cmigemo")
+;;;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/cp932")
+;;;;(setq migemo-dictionary "Z:/home/lisp/cmigemo-default-win64/dict/utf-8/migemo-dict")
+;;;;(setq migemo-options '("-q" "--emacs" "-i" "\a"))
+;;;;(setq migemo-options '("-q" "--emacs"))
+;;;;(setq migemo-coding-system 'cp932-unix)
+;;;;(setq migemo-coding-system 'utf-8-unix)
+;;;; migemo common
+;;(setq migemo-user-dictionary nil)
+;;(setq migemo-regex-dictionary nil)
+;;(load-library "migemo")
+;;(migemo-init)
 
 ;;; helm
 (helm-mode +1)
@@ -475,8 +475,8 @@
   (define-key dired-mode-map "," 'dired))
 
 ;; rinari
-(require 'rinari)
-(global-rinari-mode)
+;;(require 'rinari)
+;;(global-rinari-mode)
 
 ;;; projectile-rails
 ;;(require 'projectile)
@@ -506,17 +506,17 @@
 (global-set-key (kbd "C-%") 'anzu-query-replace-at-cursor)
 
 ;;; rubocop
-(require 'rubocop)
-(add-hook 'ruby-mode-hook 'rubocop-mode)
+;;(require 'rubocop)
+;;(add-hook 'ruby-mode-hook 'rubocop-mode)
 
 ;;; flycheck
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
-;;(autoload 'flycheck-mode "flycheck")
-;;(add-hook 'ruby-mode-hook 'flycheck-mode)
-;; シンタックスチェックをどの場面でかけるか
-(setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
-;;(setq flycheck-rubylintrc ".ruby-lint.yml")
+;;(require 'flycheck)
+;;(add-hook 'after-init-hook #'global-flycheck-mode)
+;;;;(autoload 'flycheck-mode "flycheck")
+;;;;(add-hook 'ruby-mode-hook 'flycheck-mode)
+;;;; シンタックスチェックをどの場面でかけるか
+;;(setq flycheck-check-syntax-automatically '(idle-change mode-enabled new-line save))
+;;;;(setq flycheck-rubylintrc ".ruby-lint.yml")
 
 ;; ruby-lin.ymlのあるフォルダ検索
 (defun find-ruby-lint-yml ()
@@ -660,15 +660,15 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 							 ))
 
 ;;; inf-ruby
-(require 'inf-ruby)
-(defalias 'pry 'inf-ruby)
-(setq inf-ruby-default-implementation "pry")
-										; キーがかぶるので無効化
-(define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
-
-;; ruby-electric
-(eval-after-load "ruby-mode"
-  '(add-hook 'ruby-mode-hook 'ruby-electric-mode))
+;;(require 'inf-ruby)
+;;(defalias 'pry 'inf-ruby)
+;;(setq inf-ruby-default-implementation "pry")
+;;										; キーがかぶるので無効化
+;;(define-key inf-ruby-minor-mode-map (kbd "C-M-x") nil)
+;;
+;;;; ruby-electric
+;;(eval-after-load "ruby-mode"
+;;'(add-hook 'ruby-mode-hook 'ruby-electric-mode))
 
 ;;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
