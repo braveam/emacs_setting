@@ -36,7 +36,7 @@
 ;;(w32-ime-initialize)
 ;; 日本語入力時にカーソルの色を変える設定 (色は適宜変えてください)
 (add-hook 'w32-ime-on-hook '(lambda () (set-cursor-color "coral4")))
-(add-hook 'w32-ime-off-hook '(lambda () (set-cursor-color "black")))
+(add-hook 'w32-ime-off-hook '(lambda () (set-cursor-color "gray35")))
 
 ;; ミニバッファに移動した際は最初に日本語入力が無効な状態にする
 (add-hook 'minibuffer-setup-hook 'deactivate-input-method)
@@ -77,18 +77,20 @@
 ;;; 初期フレームの設定
 (setq default-frame-alist
       (append (list
-			         '(foreground-color . "black")
-			         '(background-color . "LemonChiffon")
-			         ;;            '(background-color . "gray")
-			         '(border-color . "black")
-			         '(mouse-color . "white")
-			         '(cursor-color . "black")
-			         ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-			         '(width . 190)
-			         '(height . 51)
-			         '(top . 0)
-			         '(left . 0)
-			         )
+			   ;;'(foreground-color . "black")
+			   '(foreground-color . "#D4D4D4")
+			   '(background-color . "#1E1E1E")
+			   ;;'(background-color . "LemonChiffon")
+			   ;;            '(background-color . "gray")
+			   '(border-color . "black")
+			   '(mouse-color . "white")
+			   '(cursor-color . "#008BA5")
+			   ;;            '(font . "-*-Menlo-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+			   '(width . 190)
+			   '(height . 51)
+			   '(top . 0)
+			   '(left . 0)
+			   )
               default-frame-alist))
 
 ;;;; ロードパス
@@ -167,6 +169,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ediff-even-diff-A ((t (:extend t :background "gray30"))))
+ '(ediff-even-diff-Ancestor ((t (:extend t :background "gray25"))))
+ '(ediff-even-diff-B ((t (:extend t :background "gray25"))))
+ '(ediff-odd-diff-A ((t (:extend t :background "gray25"))))
+ '(ediff-odd-diff-B ((t (:extend t :background "gray30"))))
  '(web-mode-comment-face ((t (:foreground "#D9333F"))))
  '(web-mode-css-at-rule-face ((t (:foreground "#FF7F00"))))
  '(web-mode-css-pseudo-class-face ((t (:foreground "#FF7F00"))))
@@ -305,6 +312,7 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 ;; diffのバッファを上下ではなく左右に並べる
 (setq ediff-split-window-function 'split-window-horizontally)
+
 
 ;; コメント
 ;; 複数業コメント
@@ -769,8 +777,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
  '(anzu-search-threshold 1000)
  '(column-number-mode t)
  '(package-selected-packages
-   (quote
-	(python-mode magit helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm)))
+   '(python-mode magit helm-dired-history hookify firestarter rubocop flycheck anzu yasnippet wgrep-ag helm-ag ag company-statistics company-web ruby-electric aggressive-indent company-quickhelp eldoc-eval company robe rinari multi-web-mode wgrep helm-swoop migemo helm))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
