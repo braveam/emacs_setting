@@ -657,15 +657,15 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 
 ;;; ruby-mode
 ;;(add-hook 'ruby-mode-hook 'robe-mode)
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-
-(add-hook 'ruby-mode-hook '(lambda ()
-                             (modify-syntax-entry ?_ "w")
-                             (modify-syntax-entry ?@ "w")
-							 (setq-local company-backends '(company-robe company-dabbrev-code company-dabbrev company-capf company-files))
-							 (robe-mode)
-							 ;;(robe-start)
-							 ))
+;;(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;;
+;;(add-hook 'ruby-mode-hook '(lambda ()
+;;(modify-syntax-entry ?_ "w")
+;;(modify-syntax-entry ?@ "w")
+;;(setq-local company-backends '(company-robe company-dabbrev-code company-dabbrev company-capf company-files))
+;;(robe-mode)
+;;;;(robe-start)
+;;))
 
 ;;; inf-ruby
 ;;(require 'inf-ruby)
