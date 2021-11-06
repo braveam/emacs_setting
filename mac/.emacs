@@ -633,7 +633,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
 							 ))
 
 ;;; web-mode
-(require 'ac-html-bootstrap)
+;;(require 'ac-html-bootstrap)
 (require 'web-mode)
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -644,7 +644,7 @@ Requires ruby-lint 2.0.2 or newer.  See URL
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
   (setq-local company-backends '(company-web-html company-css company-web-jade company-robe company-dabbrev-code company-dabbrev company-capf company-files))
-  (company-web-bootstrap+)
+  ;;(company-web-bootstrap+)
   (company-web-fa+)
   (modify-syntax-entry ?_ "w")
   (modify-syntax-entry ?- "w")
